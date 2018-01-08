@@ -106,6 +106,7 @@ function setupAchievements(){
     achievements.push(new Achievement("Get 1000 microbes at the same time", "This is too many." ,function(){return microbes.length>=1000}));
     achievements.push("Feeding");
     achievements.push(new Achievement("Feed 100 times", "Fed microbes are happy microbes" ,function(){return manualfed>=100}));
+    achievements.push(new Achievement("Have a 100 items of Food", "Food is the most important meal of the day" ,function(){return foods.length>=100}));
     achievements.push(new Achievement("Have a 1000 items of Food", "A Feast!" ,function(){return foods.length>=1000}));
     achievements.push("Deaths");
     achievements.push(new Achievement("First Death", "Rest in peace, little buddy!" ,function(){return deaths>=1}));

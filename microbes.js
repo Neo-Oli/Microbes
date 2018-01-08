@@ -1,26 +1,170 @@
 var debug=false;
-var numMicrobes=3;
-var colors=["#FF0000","#00FF00","#0000FF","#FFFF00"];
-function line(x0, y0, x1, y1){
-    var dx = Math.abs(x1-x0);
-    var dy = Math.abs(y1-y0);
-    var sx = (x0 < x1) ? 1 : -1;
-    var sy = (y0 < y1) ? 1 : -1;
-    var err = dx-dy;
-    var x=null;
-    var y=null;
-    var path=[]
-    while(true){
-        path.push([x0,y0]);
+var numMicrobes=4;
+var foodmod=0
+var feedvol=10;
+var feedspread=10;
+var tps=100;
+var maxspeed=false;
+var minfps=60
+var debugvar=null;
+var speedmod=50;
+var colors=[[255,0,0],[0,255,0],[0,0,255],[255,255,0]];
+var canvas;
+var ctx;
+var microbes;
+var foods;
+var counter;
+var ticks;
+var stats;
+var deaths=0;
+var colorspeedup=50
+var mincolor=100;
+var maxcolor=255;
+var frameskip=1;
+var width=0;
+var height=0;
+var container;
+var achievements=new Array();
+var achievementQ=new Array();
+var achievementElement;
+var achievementElementName;
+var achievementElementBlurb;
+var achievementDisplaytime=0;
+var menuAchievementsElement;
+window.onload = function () { setup("microbes1"); }
+function setup(id){
+    container=document.getElementById(id);
+    var html="";
+        html+='<div class="menutrigger">⚙</div>';
+        html+='<div class="menu">';
+        //html+='<label>less food</label><label>more food</label><input type="range" min="-200" max="200" class="slider reversed" id="foodmodslider" data-variable="foodmod"><div class="reset" data-target="foodmodslider">⟲</div>';
+        //html+='<label>slower</label><label>faster</label><input type="range" min="10" max="5000" class="slider" id="tpsslider" data-variable="tps"><div class="reset" data-target="tpsslider">⟲</div>';
+        html+='<div class="achievements"></div>';
+        html+='<div class="stats"></div>';
+        html+='</div>';
+        html+='<canvas id="microbes" width="200" height="100">';
+        html+='Your browser does not support the canvas element.';
+        html+='</canvas>';
+        html+='<div id="achievement">';
+        html+='<div class="title">Achievement</div>';
+        html+='<div class="name">null</div>';
+        html+='<div class="blurb">null</div>';
+        html+='</div>';
 
-        if ((x0==x1) && (y0==y1)) break
-        var e2 = 2*err;
-        if (e2 >-dy){ err -= dy; x0  += sx; }
-        if (e2 < dx){ err += dx; y0  += sy; }
+    container.innerHTML=html;
+    var inputs=container.querySelectorAll("input");
+
+    for(i=0;i<inputs.length;i++){
+        element=inputs[i];
+        element.value=window[element.getAttribute('data-variable')];
+        element.setAttribute("data-default",element.value);
+        element.addEventListener("change",function(e){
+            element=e.originalTarget;
+            variable=element.getAttribute('data-variable');
+            window[variable]=parseInt(element.value);
+        });
     }
-    return path;
+
+    var resets=container.querySelectorAll(".reset");
+    for(i=0;i<resets.length;i++){
+        element=resets[i];
+        element.addEventListener("click",function(e){
+            element=e.originalTarget;
+            target=element.getAttribute('data-target');
+            target=container.querySelector("#"+target);
+            defaultvalue=parseInt(target.getAttribute("data-default"));
+            target.value=defaultvalue;
+            variable=target.getAttribute('data-variable');
+            window[variable]=defaultvalue;
+        });
+    }
+
+    container.classList.add("microbescontainer");
+    canvas = container.querySelector("canvas");
+    stats = container.querySelector(".stats");
+    menutrigger = container.querySelector(".menutrigger");
+    ctx = canvas.getContext("2d");
+    microbes=[];
+    foods=[];
+    counter=0;
+    ticks=0;
+    canvas.addEventListener("mousedown",feed);
+    menutrigger.addEventListener("click",function(e){
+        container.classList.toggle("menushown");
+    });
+    setupAchievements();
+    main();
 }
 
+function setupAchievements(){
+    achievementElement=container.querySelector("#achievement");
+    achievementElementName=achievementElement.querySelector(".name");
+    achievementElementBlurb=achievementElement.querySelector(".blurb");
+    menuAchievementsElement=container.querySelector(".achievements");
+    achievements.push("Numbers");
+    achievements.push(new Achievement("100 microbes", "Is it getting crowded in here?" ,function(){return microbes.length>=100}));
+    achievements.push(new Achievement("10 microbes", "First 10 microbes" ,function(){return microbes.length>=10}));
+    achievements.push(new Achievement("51 microbes", "First 51 microbes" ,function(){return microbes.length>=51}));
+    achievements.push(new Achievement("52 microbes", "First 52 microbes" ,function(){return microbes.length>=52}));
+    achievements.push(new Achievement("53 microbes", "First 53 microbes" ,function(){return microbes.length>=53}));
+    achievements.push(new Achievement("54 microbes", "First 54 microbes" ,function(){return microbes.length>=54}));
+    achievements.push(new Achievement("55 microbes", "First 55 microbes" ,function(){return microbes.length>=55}));
+    checkAchievements();
+    displayAchievements();
+    menuAchievements();
+}
+function checkAchievements(){
+    for(i=0;i<achievements.length;i++){
+        if(achievements[i].constructor.name=="Achievement"){
+            var result=achievements[i].check();
+        }
+    }
+}
+function displayAchievements(){
+    if(achievementDisplaytime>0){
+        achievementDisplaytime--;
+        if(achievementDisplaytime<1){
+            achievementElement.classList.remove("visible");
+        }
+        return false;
+    }
+
+    a=achievementQ[0];
+    if(a){
+        achievementElementName.innerHTML=a.name;
+        achievementElementBlurb.innerHTML=a.blurb;
+        achievementElement.classList.add("visible");
+        achievementDisplaytime=5;
+        achievementQ.shift();
+        menuAchievements();
+    }
+}
+function menuAchievements(){
+    var allhtml="";
+    for(i=0;i<achievements.length;i++){
+        a=achievements[i];
+        var html="";
+        if(a.constructor.name=="Achievement"){
+            var done="";
+            if(a.done){
+                done="done";
+            }
+            html+='<div class="menuAchievement '+done+'">';
+            html+='<div class="menuAchievementName">'+a.name+'</div>';
+            html+='</div>';
+        }else{
+            html='<div class="menuAchievementsTitle">'+a+'</div>';
+        }
+        allhtml+=html;
+    }
+    menuAchievementsElement.innerHTML=allhtml;
+}
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
 function sortFunction(a, b) {
     if (a[0] === b[0]) {
         return 0;
@@ -29,300 +173,239 @@ function sortFunction(a, b) {
         return (a[0] < b[0]) ? -1 : 1;
     }
 }
-class Entity{
-    constructor(x=null,y=null) {
-        this.color="#FF0000";
-        if(!x && !y){
-            this.randompos();
-        }else{
-            this.x=x;
-            this.y=y;
-        }
-        this.defaultlife=1000
-        this.life=this.defaultlife;
-        this.size=2;
-        this.angle=0
-    }
-    randompos(){
-        this.x=Math.floor(Math.random() * canvas.width);
-        this.y=Math.floor(Math.random() * canvas.height);
-    }
-    draw(){
-
-    }
-    rotate(step){
-        this.angle=this.positiveAngle(this.angle + step);
-    }
-    distanceTo(e){
-        var a=this.x - e.x;
-        var b=this.y - e.y;
-        var csqrt=Math.pow(a,2) + Math.pow(b,2);
-        var c=Math.pow(csqrt,1/2);
-        return c;
-    }
-    positiveAngle(angle){
-        while(angle>360){
-            angle=angle-360;
-        }
-        while(angle<0){
-            angle=angle+360;
-        }
-        return angle;
-    }
-    tick(){
-        this.life-=1;
-        if(this.life<=0){
-            return false;
-        }
-        return true;
-    }
+function random(max,min=0,pow=1){
+    return Math.round(Math.pow(Math.random(),pow) * (max - min) + min);
 }
-class Microbe extends Entity{
-    constructor(x=null,y=null){
-        super(x,y);
-        this.getRandomColor();
-        this.target=null;
-        this.targetangle=300;
-        this.path=[];
-        this.defaultsize=2
-        this.size=this.defaultsize;
-        this.maxsize=5;
-        this.wait=100;
-        this.searchradius=300;
-        this.dying=null;
-    }
-    getRandomColor(){
-        this.color=colors[Math.floor(Math.random()*colors.length)];
-    }
-    draw(){
-        if(debug){
-            //for(var pi in this.path){
-            //var p=this.path[pi];
-            //ctx.fillStyle = "lime";
-            //ctx.fillRect(p[0],p[1],1,1);
-            //}
-            if(this.target && this.path.length>2){
-                ctx.strokeStyle="lime"; //set color
-                ctx.beginPath();
-                ctx.moveTo(this.path[0][0],this.path[0][1]);
-                ctx.lineTo(this.path[this.path.length-1][0],this.path[this.path.length-1][1]);
-                ctx.stroke();
-            }
-        }
-        ctx.setLineDash([]) //disable dashing
-        ctx.beginPath(); //start new path
-        ctx.strokeStyle=this.color; //set color
-        ctx.ellipse(
-            this.x, //x
-            this.y, //y
-            this.size, //radiusX
-            this.size*1.6, //radiusY
-            this.angle * Math.PI/180, //rotation
-            0, //startAngle
-            2 * Math.PI //endAngle
-        );
-        ctx.stroke(); //actually draw
-        ctx.fillStyle = "yellow";
-        var p=this.rotatepoint(this.x,this.y-this.size,this.angle,this.x,this.y)
-        ctx.fillRect(p[0],p[1],1,1);
-        super.draw();
-    }
-    rotatepoint(x,y,angle,cx,cy){
-        var radians = (Math.PI / 180) * angle,
-            cos = Math.cos(radians),
-            sin = Math.sin(radians),
-            nx = (cos * (x - cx)) - (sin * (y - cy)) + cx,
-            ny = (cos * (y - cy)) + (sin * (x - cx)) + cy;
-        return [nx,ny];
-    }
-    searchpath(){
-        this.path=line(this.x,this.y,this.target.x,this.target.y);
 
-        this.targetangle = Math.atan2(this.y - this.target.y, this.x - this.target.x) * 180 / Math.PI;
-        this.targetangle = Math.round(this.positiveAngle(this.targetangle-90));
-    }
-    travel(){
-        if(!this.path.length){
-            this.searchpath()
-        }
-        if(this.targetangle!=this.angle){
-            if((this.targetangle - this.angle + 360) % 360 < 180){
-                this.rotate(1);
-            }else{
-                this.rotate(-1);
-            }
-        }else{
-            this.x=this.path[0][0];
-            this.y=this.path[0][1];
-            this.path.splice(0,1);
-        }
-        if(this.path.length<1){
-            this.eat(this.target);
-        }
-
-    }
-    searchfood(){
-        var possiblefood=new Array();
-        for(var e=0;e<entities.length;e++){
-            var food=entities[e];
-            if(food.constructor.name=="Food"){
-                var distance=this.distanceTo(food);
-                if(distance<=this.searchradius){
-                    possiblefood.push([distance,e]);
-                }
-
-            }
-        }
-        if(possiblefood.length>0){
-            var e=possiblefood.sort(sortFunction)[0][1];
-            food=entities[e];
-            this.target=food;
-        }else{
-            this.wait=50;
-        }
-
-    }
-    divide(){
-        this.size=this.defaultsize;
-        var clone=new Microbe();
-        clone.x=this.x+5;
-        clone.y=this.y+5;
-        clone.color=this.color;
-        entities.push(clone);
-    }
-    eat(food){
-        food.life=0;
-        this.looseTarget();
-        this.life=this.defaultlife;
-        this.size+=1;
-        if(this.size>this.maxsize){
-            this.divide();
-        }
-    }
-    looseTarget(){
-        this.target=0
-        this.path=[]
-        this.targetangle=0;
-    }
-    tick(){
-        if(this.dying){
-            this.dying--;
-            this.color="#555555";
-            if(this.dying % 5==0){
-                this.y++;
-            }
-            if(this.dying<=0){
-                return false
-            }
-            return true;
-        }
-        this.life--;
-        if(this.life<=0){
-            this.dying=100;
-        }
-        if(this.wait>0){
-            this.wait--;
-            return true;
-        }
-        if(this.target){
-            if(this.target.life>0){
-                this.travel();
-            }else{
-                this.looseTarget();
-            }
-        }else{
-            this.searchfood();
-
-        }
-        return true;
-    }
-}
-class Food extends Entity{
-    constructor(x=null,y=null){
-        super(x,y);
-        this.color="#FFFFFF";
-        this.size=2
-    }
-    draw(){
-
-        ctx.setLineDash([]) //disable dashing
-        ctx.beginPath(); //start new path
-        ctx.fillStyle=this.color; //set color
-        ctx.ellipse(
-            this.x, //x
-            this.y, //y
-            this.size, //radiusX
-            this.size, //radiusY
-            this.angle * Math.PI/180, //rotation
-            0, //startAngle
-            2 * Math.PI //endAngle
-        );
-        ctx.fill(); //actually draw
-        super.draw()
-    }
-}
 function feed(event){
-    entities.push(new Food(event.pageX,event.pageY));
-}
-function draw(fps, counter){
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for(e in entities){
-        entities[e].draw();
+    for(i=0;i<feedvol;i++){
+        food=new Food();
+        p=food.randompos(event.pageX,event.pageY, feedspread);
+        food.x=p[0];
+        food.y=p[1];
+        foods.push(food);
     }
-    ctx.fillStyle = "yellow";
-    ctx.font = "12px Arial";
-    ctx.fillText("fps:"+fps,10,30);
-    ctx.fillText("ticks:"+counter,10,50);
+}
+function draw(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for(e in foods){
+        foods[e].draw();
+    }
+    for(e in microbes){
+        microbes[e].draw();
+    }
+
+
+}
+function updateCanvas(){
+    var newWidth=canvas.offsetWidth;
+    var newHeight=canvas.offsetHeight
+    if(width!=newWidth || height!=newHeight){
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        width=newWidth;
+        height=newHeight;
+    }
+}
+function drawstats(fps, counter,ticks,maxspeedstats){
+    html="";
+    html+=statline("fps",fps);
+    html+=statline("ticks",counter);
+    html+=statline("ticks/s",ticks);
+    html+=statline("foods",foods.length);
+    html+=statline("Food Chance",foodchance());
+    html+=maxspeedstats;
+    if(debugvar!==null){
+        html+=statline("debugvar",debugvar);
+    }
+    html+=statline("alive",microbes.length);
+    html+=statline("deaths",deaths);
+    html+=statline("total",deaths+microbes.length);
+    html+=statlineMinMax(microbes,"generation");
+    html+=statlineMinMax(microbes,"mutations");
+    html+=statlineMinMax(microbes,"fullhealth");
+    html+=statlineMinMax(microbes,"size");
+    html+=statlineMinMax(microbes,"minsize");
+    html+=statlineMinMax(microbes,"maxsize");
+    html+=statlineMinMax(microbes,"speed");
+    html+=statlineMinMax(microbes,"mutatechance");
+    html+=statlineMinMax(microbes,"mutaterange");
+    html+=statlineMinMax(microbes,"traveledlast");
+    html+=statlineMinMax(microbes,"rotatebreak");
+    html+=statlineMinMax(microbes,"searchradius");
+    stats.innerHTML=html;
+}
+function statline(key,val){
+    return key+": "+val+"<br>";
+}
+function statlineMinMax(obj,key){
+    var min=0;
+    var max=0;
+    var sorted=obj.sort(function(a, b){
+        av=a[key];
+        bv=b[key];
+        if(av < bv) return -1;
+        if(av > bv) return 1;
+        return 0;
+    });
+    if(sorted[0]){
+        min=sorted[0][key];
+        max=sorted[sorted.length-1][key];
+    }
+    return key+": min="+min+";max="+max+"<br>";
 }
 function tick(counter){
-    for(e in entities){
-        if(!entities[e].tick()){
-            entities.splice(e,1);
+    for(e in microbes){
+        if(!microbes[e].tick()){
+            deaths+=1;
+            microbes.splice(e,1);
         }
     }
-    if(counter % 50==0){
-        entities.push(new Food());
+    for(e in foods){
+        if(!foods[e].tick()){
+            foods.splice(e,1);
+        }
+    }
+    if(counter % foodchance()==0){
+        //foods.push(new Food());
     }
 }
-window.onload = function () { main(); }
-
-var canvas = document.getElementById("microbes");
-var ctx = canvas.getContext("2d");
-var entities=[];
+function foodchance(){
+    res=microbes.length/2;
+    res+=foodmod;
+    if(res<1){res=1;}
+    return Math.floor(res);
+}
+function action(){
+    ticks++;
+    counter++;
+    tick(counter);
+}
 function main(){
-    canvas.addEventListener("mousedown",feed);
     //var con={};
     //con.canvas=canvas;
     //con.ctx=ctx;
-    //con.entities=entities;
+    //con.microbes=microbes;
+    updateCanvas();
     draw();
     for(i=0;i<numMicrobes;i++){
-        entities.push(new Microbe());
+        microbes.push(new Microbe());
     }
-    var counter=0;
+    microbes[0].x=width/2;
+    microbes[0].y=height/2;
     var fps=0;
-    var od = new Date().getTime();
-    var osec = new Date().getTime();
+    var start = new Date().getTime();
+    var od=start
+    var osec = start
     var ofps=0;
+    var oticks=0;
+    var done=0;
+    var atps=tps; // actual tps
+    var speedstep=1;
+    var speedvelocity=1;
+    var fpsstats=[]
+    var fpsfuzzy=10
+    var target=1;
+    var missed=0;
+    var time=0
+    var safespeed=tps;
+    var emergencystops=0;
+    var loopcounter=0;
+    for(i=0;i<fpsfuzzy;i++){
+        fpsstats.push(60);
+    }
+
     loop();
     function loop(){
+        loopcounter+=1;
+        atps=tps
         var d = new Date().getTime();
-        if(od+(1000/10000)<=d){
-            counter++;
-            od=d;
-            tick(counter);
-            draw(ofps, counter);
+        target=(d-(start+time))*(atps/1000);
+        var work=(target-done)
+        work=Math.ceil(work);
+        for(i=0;i<work;i++){
+            action();
         }
+        done += work;
         if(osec+1000<=d){
+            time+=1000
+            missed=atps-ticks;
+            while(ticks<atps){
+                action();
+            }
             osec=d;
-            osec=Math.floor(osec/1000)*1000
-            ofps=fps;
+            ofps=fps
+            //fpsstats.push(fps);
+            //fpsstats.shift();
+            //ofps=Math.round(fpsstats.reduce(function(a,b){return a+b})/fpsfuzzy);
+            //if(ofps>=minfps-5){
+            //safespeed=atps;
+            //}
             fps=0;
+            oticks=ticks;
+            ticks=0;
+
+            //if(maxspeed){
+            //if(speedvelocity==2||speedvelocity==-2){
+            //speedstep*=2;
+            //}else {
+            //speedstep=Math.ceil(speedstep/2);
+            //}
+            //if(ofps>=minfps){
+            //if(speedvelocity<-1){
+            //speedstep=Math.ceil(speedstep/2);
+            //atps+=speedstep;
+            //speedvelocity=-1
+            //}
+            //atps+=speedstep;
+
+            //speedvelocity++;
+            //}else if(ofps<minfps){
+            //if(speedvelocity>1){
+            //speedstep=Math.ceil(speedstep/2);
+            //speedstep=Math.ceil(speedstep/2);
+            //speedvelocity=1
+            //}
+            //atps-=speedstep;
+
+            //speedvelocity--;
+            //if(atps<100){
+            //atps=safespeed;
+            //speedstep=1024;
+            //speedvelocity=0;
+            //safespeed/=2;
+            //emergencystops++;
+            //}
+            //}else{
+            //speedvelocity=0;
+            //}
+            //if(speedvelocity<-2){speedvelocity=-2;}
+            //if(speedvelocity> 2){speedvelocity= 2;}
+            //maxspeedstat="";
+            //maxspeedstat+=statline("tps",atps);
+            //maxspeedstat+=statline("speedstep",speedstep);
+            //maxspeedstat+=statline("safespeed",safespeed);
+            //maxspeedstat+=statline("Target FPS",minfps);
+            //maxspeedstat+=statline("emergency stops",emergencystops);
+            //}else{
+            maxspeedstat=""
+            //atps=tps;
+            //}
+            drawstats(ofps, counter, oticks,maxspeedstat);
+            displayAchievements();
+            updateCanvas();
         }
-        fps+=1;
+        if(loopcounter % frameskip==0){
+            draw();
+            fps+=1;
+        }
         requestAnimationFrame(loop);
     }
 }
-
+function masterrace(){
+    i=new Microbe;
+    i.speed=1000;
+    i.searchradius=1000;
+    microbes[0]=i;
+    return i;
+}

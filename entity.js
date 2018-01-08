@@ -44,11 +44,18 @@ class Entity{
         }
         return path;
     }
-    convertColor(color){
-        return "rgb("+color[0]+","+color[1]+","+color[2]+")";
+    convertColor(color, opacity=1){
+        return "hsla("+color[0]+","+color[1]+"%,"+color[2]+"%,"+opacity+")";
     }
     rotate(step){
-        this.angle=this.positiveAngle(Math.floor(this.angle + step));
+        var old=this.angle
+        var newangle=this.angle+step;
+        if(newangle<0){
+            newangle=Math.floor(newangle);
+        }else{
+            newangle=Math.ceil(newangle);
+        }
+        this.angle=this.positiveAngle(newangle);
     }
     distanceTo(e){
         var a=this.x - e.x;

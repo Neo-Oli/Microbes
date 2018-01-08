@@ -3,7 +3,12 @@ class Food extends Entity{
         super();
         this.color=[255,255,255];
         this.size=2
-        var p=this.randompos();
+        var randomMicrobe=microbes[Math.floor(Math.random() *microbes.length)];
+        if(randomMicrobe){
+            var p=this.randompos(randomMicrobe.x,randomMicrobe.y,randomMicrobe.searchradius);
+        }else{
+            var p=this.randompos();
+        }
         this.x=p[0];
         this.y=p[1];
     }

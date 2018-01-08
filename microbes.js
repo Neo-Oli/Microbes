@@ -1,14 +1,14 @@
+
 var debug=false;
-var numMicrobes=4;
-var foodmod=0
-var feedvol=10;
-var feedspread=10;
+var numMicrobes=1;
+var foodmod=200
+var feedvol=5;
+var manualfed=0;
+var autofed=0;
+var feedspread=5;
 var tps=100;
-var maxspeed=false;
-var minfps=60
 var debugvar=null;
 var speedmod=50;
-var colors=[[255,0,0],[0,255,0],[0,0,255],[255,255,0]];
 var canvas;
 var ctx;
 var microbes;
@@ -17,9 +17,6 @@ var counter;
 var ticks;
 var stats;
 var deaths=0;
-var colorspeedup=50
-var mincolor=100;
-var maxcolor=255;
 var frameskip=1;
 var width=0;
 var height=0;
@@ -37,8 +34,9 @@ function setup(id){
     var html="";
         html+='<div class="menutrigger">⚙</div>';
         html+='<div class="menu">';
-        //html+='<label>less food</label><label>more food</label><input type="range" min="-200" max="200" class="slider reversed" id="foodmodslider" data-variable="foodmod"><div class="reset" data-target="foodmodslider">⟲</div>';
+        html+='<label>less food</label><label>more food</label><input type="range" min="-200" max="200" class="slider reversed" id="foodmodslider" data-variable="foodmod"><div class="reset" data-target="foodmodslider">⟲</div>';
         //html+='<label>slower</label><label>faster</label><input type="range" min="10" max="5000" class="slider" id="tpsslider" data-variable="tps"><div class="reset" data-target="tpsslider">⟲</div>';
+        html+='<h2>Achievements</h2>';
         html+='<div class="achievements"></div>';
         html+='<div class="stats"></div>';
         html+='</div>';
@@ -46,7 +44,7 @@ function setup(id){
         html+='Your browser does not support the canvas element.';
         html+='</canvas>';
         html+='<div id="achievement">';
-        html+='<div class="title">Achievement</div>';
+        html+='<div class="title">Achievement unlocked</div>';
         html+='<div class="name">null</div>';
         html+='<div class="blurb">null</div>';
         html+='</div>';
@@ -101,14 +99,20 @@ function setupAchievements(){
     achievementElementName=achievementElement.querySelector(".name");
     achievementElementBlurb=achievementElement.querySelector(".blurb");
     menuAchievementsElement=container.querySelector(".achievements");
-    achievements.push("Numbers");
-    achievements.push(new Achievement("100 microbes", "Is it getting crowded in here?" ,function(){return microbes.length>=100}));
-    achievements.push(new Achievement("10 microbes", "First 10 microbes" ,function(){return microbes.length>=10}));
-    achievements.push(new Achievement("51 microbes", "First 51 microbes" ,function(){return microbes.length>=51}));
-    achievements.push(new Achievement("52 microbes", "First 52 microbes" ,function(){return microbes.length>=52}));
-    achievements.push(new Achievement("53 microbes", "First 53 microbes" ,function(){return microbes.length>=53}));
-    achievements.push(new Achievement("54 microbes", "First 54 microbes" ,function(){return microbes.length>=54}));
-    achievements.push(new Achievement("55 microbes", "First 55 microbes" ,function(){return microbes.length>=55}));
+    achievements.push("Microbes");
+    achievements.push(new Achievement("Cell Division", "Out of one make two." ,function(){return microbes.length>=2}));
+    achievements.push(new Achievement("Get 10 microbes at the same time", "It's starting to look like a party." ,function(){return microbes.length>=10}));
+    achievements.push(new Achievement("Get 100 microbes at the same time", "" ,function(){return microbes.length>=100}));
+    achievements.push(new Achievement("Get 1000 microbes at the same time", "This is too many." ,function(){return microbes.length>=1000}));
+    achievements.push("Feeding");
+    achievements.push(new Achievement("Feed 100 times", "Fed microbes are happy microbes" ,function(){return manualfed>=100}));
+    achievements.push(new Achievement("Have a 1000 items of Food", "A Feast!" ,function(){return foods.length>=1000}));
+    achievements.push("Deaths");
+    achievements.push(new Achievement("First Death", "Rest in peace, little buddy!" ,function(){return deaths>=1}));
+    achievements.push(new Achievement("10 Deaths", "It hurts a little less each time" ,function(){return deaths>=10}));
+    achievements.push(new Achievement("100 Deaths", "Tja" ,function(){return deaths>=100}));
+    achievements.push(new Achievement("1000 Deaths", "Die you stupid circles!" ,function(){return deaths>=1000}));
+    achievements.push(new Achievement("10000 Deaths", "You're a monster!" ,function(){return deaths>=10000}));
     checkAchievements();
     displayAchievements();
     menuAchievements();
@@ -184,7 +188,9 @@ function feed(event){
         food.x=p[0];
         food.y=p[1];
         foods.push(food);
+        manualfed++;
     }
+    checkAchievements();
 }
 function draw(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -266,12 +272,14 @@ function tick(counter){
             foods.splice(e,1);
         }
     }
-    if(counter % foodchance()==0){
-        //foods.push(new Food());
+    if(counter % foodchance()==0 && manualfed>0){
+        foods.push(new Food());
+        autofed++;
     }
 }
 function foodchance(){
-    res=microbes.length/2;
+    res=microbes.length;
+    res+=foods.length/2
     res+=foodmod;
     if(res<1){res=1;}
     return Math.floor(res);
@@ -282,17 +290,14 @@ function action(){
     tick(counter);
 }
 function main(){
-    //var con={};
-    //con.canvas=canvas;
-    //con.ctx=ctx;
-    //con.microbes=microbes;
     updateCanvas();
     draw();
     for(i=0;i<numMicrobes;i++){
         microbes.push(new Microbe());
     }
-    microbes[0].x=width/2;
-    microbes[0].y=height/2;
+    microbes[0].x=Math.floor(width/2);
+    microbes[0].y=Math.floor(height/2);
+    microbes[0].health=999999999999
     var fps=0;
     var start = new Date().getTime();
     var od=start
@@ -320,7 +325,7 @@ function main(){
         loopcounter+=1;
         atps=tps
         var d = new Date().getTime();
-        target=(d-(start+time))*(atps/1000);
+        target=(d-od)*(atps/1000);
         var work=(target-done)
         work=Math.ceil(work);
         for(i=0;i<work;i++){
@@ -328,6 +333,7 @@ function main(){
         }
         done += work;
         if(osec+1000<=d){
+            od=d;
             time+=1000
             missed=atps-ticks;
             while(ticks<atps){

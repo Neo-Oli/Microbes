@@ -1,15 +1,14 @@
 class Microbe extends Entity{
     constructor(x=null,y=null){
         super(x,y);
-        this.getRandomColor();
         this.target=null;
         this.targetangle=300;
         this.path=[];
         this.minsize=2
-        this.size=this.minsize;
+        this.size=4;
         this.maxsize=5;
         this.speed=10
-        this.fullhealth=2000;
+        this.fullhealth=3000;
         this.health=this.fullhealth;
         this.wait=0;
         this.searchradius=100;
@@ -22,6 +21,24 @@ class Microbe extends Entity{
         this.traveled=0;
         this.traveledlast=0;
         this.rotatebreak=10;
+
+
+        this.defaultcolors=[
+            [0,100,50],
+            [120,100,50],
+            [240,100,50],
+            [60,100,50],
+        ];
+        this.maxh=360;
+        this.minh=0;
+        this.suph=20;
+        this.maxs=100;
+        this.mins=25;
+        this.sups=10;
+        this.maxl=70;
+        this.minl=30;
+        this.supl=10;
+        this.getRandomColor();
     }
     mutate(){
         this.x+=this.size;
@@ -35,38 +52,46 @@ class Microbe extends Entity{
         this.rotatebreak=this.mutateInt(this.rotatebreak);
         this.searchradius=this.mutateInt(this.searchradius);
         this.color=this.mutateColor(this.color);
-        checkAchievements();
 
     }
     mutateColor(color){
         return [
-            this.mutateInt(color[0],mincolor,maxcolor,colorspeedup),
-            this.mutateInt(color[1],mincolor,maxcolor,colorspeedup),
-            this.mutateInt(color[2],mincolor,maxcolor,colorspeedup),
+            this.mutateInt(color[0],this.minh,this.maxh,this.suph, true),
+            this.mutateInt(color[1],this.mins,this.maxs,this.sups),
+            this.mutateInt(color[2],this.minl,this.maxl,this.supl),
         ]
     }
-    mutateInt(value,min=1,max=100000000000,speedup=1){
+    mutateInt(value,min=1,max=100000000000,speedup=1,circular=false){
         var chance=this.mutatechance;
         var range=this.mutaterange*speedup;
         if(random(1,0,chance)){
             this.mutations++;
             var reach=random(range,0-range,chance)
             value+=reach;
-            if(value<min){
-                value=min;
-                //illegal mutations are punished
-                this.fullhealth-=reach;
-            }
-            if(value>max){
-                value=max;
-                //illegal mutations are punished
-                this.fullhealth-=reach;
+            if(circular){
+                while(value>max){
+                    value=value-max;
+                }
+                while(value<min){
+                    value=value+max;
+                }
+            }else{
+                if(value<min){
+                    value=min;
+                    //illegal mutations are punished
+                    this.fullhealth-=reach;
+                }
+                if(value>max){
+                    value=max;
+                    //illegal mutations are punished
+                    this.fullhealth-=reach;
+                }
             }
         }
         return value;
     }
     getRandomColor(){
-        this.color=colors[Math.floor(Math.random()*colors.length)];
+        this.color=this.defaultcolors[Math.floor(Math.random()*this.defaultcolors.length)];
     }
     draw(){
         if(debug){
@@ -77,6 +102,7 @@ class Microbe extends Entity{
             //}
             if(this.target && this.path.length>2){
                 ctx.strokeStyle="lime"; //set color
+                ctx.lineWidth=1;
                 ctx.beginPath();
                 ctx.moveTo(this.path[0][0],this.path[0][1]);
                 ctx.lineTo(this.path[this.path.length-1][0],this.path[this.path.length-1][1]);
@@ -85,12 +111,36 @@ class Microbe extends Entity{
         }
         ctx.setLineDash([]) //disable dashing
         ctx.beginPath(); //start new path
+        ctx.lineWidth=1;
         ctx.strokeStyle=this.convertColor(this.color); //set color
         ctx.ellipse(
             this.x, //x
             this.y, //y
             this.size, //radiusX
             this.size*1.6, //radiusY
+            this.angle * Math.PI/180, //rotation
+            0, //startAngle
+            2 * Math.PI //endAngle
+        );
+        ctx.stroke(); //actually draw
+        ctx.lineWidth=3;
+        ctx.strokeStyle=this.convertColor(this.color,0.5); //set color
+        ctx.ellipse(
+            this.x, //x
+            this.y, //y
+            this.size+1, //radiusX
+            this.size*1.6+1, //radiusY
+            this.angle * Math.PI/180, //rotation
+            0, //startAngle
+            2 * Math.PI //endAngle
+        );
+        ctx.stroke(); //actually draw
+        ctx.strokeStyle=this.convertColor(this.color,0.2); //set color
+        ctx.ellipse(
+            this.x, //x
+            this.y, //y
+            this.size+2, //radiusX
+            this.size*1.6+2, //radiusY
             this.angle * Math.PI/180, //rotation
             0, //startAngle
             2 * Math.PI //endAngle
@@ -193,6 +243,7 @@ class Microbe extends Entity{
         var clone=Object.assign(new Microbe,this)
         clone.mutate()
         microbes.push(clone);
+        checkAchievements();
     }
     eat(food){
         food.health=0;

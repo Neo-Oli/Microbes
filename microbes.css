@@ -16,7 +16,7 @@ html,body{
 .microbescontainer{
     position: relative;
     overflow: hidden;
-    --size:200px;
+    --size:250px;
 }
 .microbescontainer .menu{
     width: var(--size);
@@ -24,13 +24,14 @@ html,body{
     height: 100%;
     position: absolute;
     background-color: #22222299;
-    /*pointer-events: none;*/
-    overflow: hidden;
+    /*! pointer-events: none; */
 
     color:white;
     transition: left 0.5s;
     padding:5px;
     box-sizing:border-box;
+    overflow-y: scroll;
+    overflow-x:visible;
 }
 .microbescontainer .stats{
     word-break: break-all;
@@ -138,6 +139,9 @@ html,body{
     background-color:#888888;
     position:absolute;
     margin-top: var(--size);
+    padding:10px;
+    min-width:200px;
 }
+
 
 

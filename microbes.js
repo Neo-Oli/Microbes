@@ -1,10 +1,10 @@
-
+"use strict";
 class Microbes{
     constructor(id){
 
         this.debug=false;
-        this.numMicrobes=1;
-        this.foodmod=200
+        this.numMicrobes=4;
+        this.foodmod=500
         this.feedvol=5;
         this.manualfed=0;
         this.autofed=0;
@@ -34,7 +34,8 @@ class Microbes{
         var html="";
         html+='<div class="menutrigger">⚙</div>';
         html+='<div class="menu">';
-        html+='<label>less food</label><label>more food</label><input type="range" min="-200" max="200" class="slider reversed" id="foodmodslider" data-variable="foodmod"><div class="reset" data-target="foodmodslider">⟲</div>';
+        html+="<h3>Autofeed</h3>";
+        html+='<label>less food</label><label>more food</label><input type="range" min="-250" max="500" class="slider reversed" id="foodmodslider" data-variable="foodmod"><div class="reset" data-target="foodmodslider">⟲</div>';
         //html+='<label>slower</label><label>faster</label><input type="range" min="10" max="5000" class="slider" id="tpsslider" data-variable="tps"><div class="reset" data-target="tpsslider">⟲</div>';
         html+='<h2>Achievements</h2>';
         html+='<div class="achievements"></div>';
@@ -108,7 +109,7 @@ class Microbes{
         this.achievementElementBlurb=this.achievementElement.querySelector(".blurb");
         this.menuAchievementsElement=this.container.querySelector(".achievements");
         this.achievements.push("Microbes");
-        this.achievements.push(new Achievement(this,"Cell Division", "Out of one make two." ,function(){return ui.microbes.length>=2}));
+        this.achievements.push(new Achievement(this,"Cell Division", "Out of one make two." ,function(){return ui.microbes.length>ui.numMicrobes}));
         this.achievements.push(new Achievement(this,"Get 10 microbes at the same time", "It's starting to look like a party." ,function(){return ui.microbes.length>=10}));
         this.achievements.push(new Achievement(this,"Get 100 microbes at the same time", "" ,function(){return ui.microbes.length>=100}));
         this.achievements.push(new Achievement(this,"Get 200 microbes at the same time", "" ,function(){return ui.microbes.length>=200}));
@@ -120,7 +121,7 @@ class Microbes{
         this.achievements.push(new Achievement(this,"Have a 100 items of Food", "Food is the most important meal of the day" ,function(){return ui.foods.length>=100}));
         this.achievements.push(new Achievement(this,"Have a 1000 items of Food", "A Feast!" ,function(){return ui.foods.length>=1000}));
         this.achievements.push("Deaths");
-        this.achievements.push(new Achievement(this,"First Death", "Rest in peace, little buddy!" ,function(){return ui.deaths>=1}));
+        this.achievements.push(new Achievement(this,"First Death", "Rest in peace, little buddy! :(" ,function(){return ui.deaths>=1}));
         this.achievements.push(new Achievement(this,"10 Deaths", "It hurts a little less each time" ,function(){return ui.deaths>=10}));
         this.achievements.push(new Achievement(this,"100 Deaths", "Tja" ,function(){return ui.deaths>=100}));
         this.achievements.push(new Achievement(this,"1000 Deaths", "Die you stupid circles!" ,function(){return ui.deaths>=1000}));
@@ -275,11 +276,16 @@ class Microbes{
         this.updateCanvas();
         this.draw();
         for(var i=0;i<this.numMicrobes;i++){
-            this.microbes.push(new Microbe(this));
+            var microbe=new Microbe(this);
+            if(microbe.defaultcolors[i]){
+                microbe.color=microbe.defaultcolors[i]
+                microbe.health=999999999999;
+            }
+            this.microbes.push(microbe);
         }
         this.microbes[0].x=Math.floor(this.width/2);
         this.microbes[0].y=Math.floor(this.height/2);
-        this.microbes[0].health=999999999999
+
         var fps=0;
         var start = new Date().getTime();
         var od=start
@@ -423,5 +429,5 @@ class Microbes{
     }
 }
 
-game=new Microbes("microbes1")
+var game=new Microbes("microbes1")
 window.onload =  function() { game.play(); }

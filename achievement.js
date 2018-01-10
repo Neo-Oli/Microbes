@@ -15,7 +15,7 @@ class Achievement{
 
         if(result){
             this.done=true;
-            this.addToQ()
+            this.addToQ();
         }
         return result;
     }

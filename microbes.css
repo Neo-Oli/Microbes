@@ -1,7 +1,8 @@
-html,body{
+body.microbes-demosite{
     margin:0;
-    height:100%;
+    height:100vh;
     overflow:hidden;
+    font-family:sans-serif;
 }
 .microbescontainer canvas{
     width:100%;

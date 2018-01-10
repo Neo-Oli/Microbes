@@ -1,5 +1,6 @@
 class Achievement{
-    constructor(name, blurb, code) {
+    constructor(ui,name, blurb, code) {
+        this.ui=ui;
         this.name=name;
         this.blurb=blurb;
         this.code=code;
@@ -19,6 +20,6 @@ class Achievement{
         return result;
     }
     addToQ(){
-        achievementQ.push(this);
+       this.ui.achievementQ.push(this);
     }
 }

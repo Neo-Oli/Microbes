@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>microbes</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="microbes.css" type="text/css">
     </head>
     <body>
@@ -13,6 +13,11 @@
         <script src="microbe.js"></script>
         <script src="food.js"></script>
         <script src="microbes.js"></script>
+        <script>
+            window.onload =  function() {
+                game=new Microbes("microbes1");
+                game.play(); }
+        </script>
     </body>
 </html>
 

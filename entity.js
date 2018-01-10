@@ -1,5 +1,6 @@
 class Entity{
-    constructor() {
+    constructor(ui) {
+        this.ui=ui;
         this.color=[255,0,0];
         var p=this.randompos();
         this.x=p[0];
@@ -11,19 +12,27 @@ class Entity{
     }
     randompos(nearx=null,neary=null,near=0){
         if(nearx!==null){
-            var x=getRandomInt(nearx-near,nearx+near)
+            var x=this.getRandomInt(nearx-near,nearx+near)
         }else{
-            var x=Math.floor(Math.random() * canvas.width);
+            var x=Math.floor(Math.random() * this.ui.canvas.width);
         }
         if(neary!==null){
-            var y=getRandomInt(neary-near,neary+near)
+            var y=this.getRandomInt(neary-near,neary+near)
         }else{
-            var y=Math.floor(Math.random() * canvas.height);
+            var y=Math.floor(Math.random() * this.ui.canvas.height);
         }
         return [x,y];
     }
     draw(){
 
+    }
+    random(max,min=0,pow=1){
+        return Math.round(Math.pow(Math.random(),pow) * (max - min) + min);
+    }
+     getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
     }
     line(x0, y0, x1, y1){
         var dx = Math.abs(x1-x0);

@@ -64,9 +64,9 @@ class Microbe extends Entity{
     mutateInt(value,min=1,max=100000000000,speedup=1,circular=false){
         var chance=this.mutatechance;
         var range=this.mutaterange*speedup;
-        if(random(1,0,chance)){
+        if(this.random(1,0,chance)){
             this.mutations++;
-            var reach=random(range,0-range,chance)
+            var reach=this.random(range,0-range,chance)
             value+=reach;
             if(circular){
                 while(value>max){
@@ -94,26 +94,26 @@ class Microbe extends Entity{
         this.color=this.defaultcolors[Math.floor(Math.random()*this.defaultcolors.length)];
     }
     draw(){
-        if(debug){
+        if(this.ui.debug){
             //for(var pi in this.path){
             //var p=this.path[pi];
-            //ctx.fillStyle = "lime";
-            //ctx.fillRect(p[0],p[1],1,1);
+            //this.ui.ctx.fillStyle = "lime";
+            //this.ui.ctx.fillRect(p[0],p[1],1,1);
             //}
             if(this.target && this.path.length>2){
-                ctx.strokeStyle="lime"; //set color
-                ctx.lineWidth=1;
-                ctx.beginPath();
-                ctx.moveTo(this.path[0][0],this.path[0][1]);
-                ctx.lineTo(this.path[this.path.length-1][0],this.path[this.path.length-1][1]);
-                ctx.stroke();
+                this.ui.ctx.strokeStyle="lime"; //set color
+                this.ui.ctx.lineWidth=1;
+                this.ui.ctx.beginPath();
+                this.ui.ctx.moveTo(this.path[0][0],this.path[0][1]);
+                this.ui.ctx.lineTo(this.path[this.path.length-1][0],this.path[this.path.length-1][1]);
+                this.ui.ctx.stroke();
             }
         }
-        ctx.setLineDash([]) //disable dashing
-        ctx.beginPath(); //start new path
-        ctx.lineWidth=1;
-        ctx.strokeStyle=this.convertColor(this.color); //set color
-        ctx.ellipse(
+        this.ui.ctx.setLineDash([]) //disable dashing
+        this.ui.ctx.beginPath(); //start new path
+        this.ui.ctx.lineWidth=1;
+        this.ui.ctx.strokeStyle=this.convertColor(this.color); //set color
+        this.ui.ctx.ellipse(
             this.x, //x
             this.y, //y
             this.size, //radiusX
@@ -122,10 +122,10 @@ class Microbe extends Entity{
             0, //startAngle
             2 * Math.PI //endAngle
         );
-        ctx.stroke(); //actually draw
-        ctx.lineWidth=3;
-        ctx.strokeStyle=this.convertColor(this.color,0.5); //set color
-        ctx.ellipse(
+        this.ui.ctx.stroke(); //actually draw
+        this.ui.ctx.lineWidth=3;
+        this.ui.ctx.strokeStyle=this.convertColor(this.color,0.5); //set color
+        this.ui.ctx.ellipse(
             this.x, //x
             this.y, //y
             this.size+1, //radiusX
@@ -134,9 +134,9 @@ class Microbe extends Entity{
             0, //startAngle
             2 * Math.PI //endAngle
         );
-        ctx.stroke(); //actually draw
-        ctx.strokeStyle=this.convertColor(this.color,0.2); //set color
-        ctx.ellipse(
+        this.ui.ctx.stroke(); //actually draw
+        this.ui.ctx.strokeStyle=this.convertColor(this.color,0.2); //set color
+        this.ui.ctx.ellipse(
             this.x, //x
             this.y, //y
             this.size+2, //radiusX
@@ -145,10 +145,10 @@ class Microbe extends Entity{
             0, //startAngle
             2 * Math.PI //endAngle
         );
-        ctx.stroke(); //actually draw
-        ctx.fillStyle = "yellow";
+        this.ui.ctx.stroke(); //actually draw
+        this.ui.ctx.fillStyle = "yellow";
         var p=this.rotatepoint(this.x,this.y-this.size,this.angle,this.x,this.y)
-        ctx.fillRect(p[0],p[1],1,1);
+        this.ui.ctx.fillRect(p[0],p[1],1,1);
         super.draw();
     }
     rotatepoint(x,y,angle,cx,cy){
@@ -182,7 +182,7 @@ class Microbe extends Entity{
                 }
             }
         }else{
-            var distance=this.speed/speedmod;
+            var distance=this.speed/this.ui.speedmod;
             distance=distance*Math.pow(this.size,-0.1)
             this.traveledlast=distance
             this.traveled+=distance;
@@ -220,8 +220,8 @@ class Microbe extends Entity{
     }
     searchfood(){
         var possiblefood=new Array();
-        for(var e=0;e<foods.length;e++){
-            var food=foods[e];
+        for(var e=0;e<this.ui.foods.length;e++){
+            var food=this.ui.foods[e];
             if(food.constructor.name=="Food"){
                 var distance=this.distanceTo(food);
                 if(distance<=this.searchradius){
@@ -230,8 +230,15 @@ class Microbe extends Entity{
             }
         }
         if(possiblefood.length>0){
-            var e=possiblefood.sort(sortFunction)[0][1];
-            food=foods[e];
+            var e=possiblefood.sort(function(a, b) {
+                if (a[0] === b[0]) {
+                    return 0;
+                }
+                else {
+                    return (a[0] < b[0]) ? -1 : 1;
+                }
+            })[0][1]
+            food=this.ui.foods[e];
             this.target=food;
         }else{
             var p=this.randompos(this.x,this.y,50);
@@ -240,10 +247,14 @@ class Microbe extends Entity{
     }
     divide(){
         this.size=Math.floor(this.size/2);
-        var clone=Object.assign(new Microbe,this)
+        var clone=Object.assign(new Microbe(this.ui),this)
         clone.mutate()
-        microbes.push(clone);
-        checkAchievements();
+        this.ui.microbes.push(clone);
+        this.ui.checkAchievements();
+    }
+    die(){
+        this.dying=this.dyinglength
+        this.ui.checkAchievements();
     }
     eat(food){
         food.health=0;
@@ -283,7 +294,7 @@ class Microbe extends Entity{
                 this.size--;
                 this.health=Math.floor(this.fullhealth/2);
             }else{
-                this.dying=this.dyinglength
+                this.die();
             }
         }
         if(this.wait>0){

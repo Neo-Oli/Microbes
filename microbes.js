@@ -88,8 +88,9 @@ class Microbes{
         this.counter=0;
         this.canvas.addEventListener("mousedown",function(event){
             for(var i=0;i<ui.feedvol;i++){
+                console.log(event);
                 var food=new Food(ui);
-                var p=food.randompos(event.pageX,event.pageY, ui.feedspread);
+                var p=food.randompos(event.layerX,event.layerY, ui.feedspread);
                 food.x=p[0];
                 food.y=p[1];
                 ui.foods.push(food);

@@ -428,6 +428,3 @@ class Microbes{
         return i;
     }
 }
-
-var game=new Microbes("microbes1")
-window.onload =  function() { game.play(); }

@@ -1,4 +1,6 @@
 {
+    "name": "neo_oli/microbes",
+    "description": "Microbes Simulation/Game",
     "require": {
         "matthiasmullie/minify": "*"
     }

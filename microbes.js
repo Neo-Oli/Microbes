@@ -41,7 +41,7 @@ class Microbes{
         html+='<div class="achievements"></div>';
         html+='<div class="stats"></div>';
         html+='</div>';
-        html+='<canvas id="microbes" width="200" height="100">';
+        html+='<canvas id="microbes" width="200" height="300">';
         html+='Your browser does not support the canvas element.';
         html+='</canvas>';
         html+='<div id="achievement">';

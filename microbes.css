@@ -3,11 +3,11 @@ body.microbes-demosite{
     height:100vh;
     overflow:hidden;
     font-family:sans-serif;
+    background-color:#070215;
 }
 .microbescontainer canvas{
     width:100%;
     height:100%;
-    background-color:#070215;
     top:0px;
     left:0px;
 }

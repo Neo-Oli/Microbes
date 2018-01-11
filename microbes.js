@@ -103,6 +103,14 @@ class Microbes{
         this.setupAchievements();
     }
 
+    save(){
+        if (typeof(Storage) !== "undefined") {
+            console.log("Saving is enabled");
+        } else {
+            console.log("Your browser doesn't support save/load");
+        }
+    }
+
     setupAchievements(){
         var ui=this;
         this.achievementElement=this.container.querySelector("#achievement");
@@ -293,6 +301,7 @@ class Microbes{
         var osec = start
         var atps=this.tps; // actual tps
         var ticks=0;
+        var savetimer=0;
         //var speedstep=1;
         //var speedvelocity=1;
         //var fpsstats=[]
@@ -337,6 +346,10 @@ class Microbes{
             }
             od=d;
 
+            if(savetimer+10000<=d){
+                savetimer=d;
+                ui.save();
+            }
             if(osec+1000<=d){
                 atps=ui.tps
                 //missed=atps-ticks;

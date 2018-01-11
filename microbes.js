@@ -41,7 +41,7 @@ class Microbes{
         html+='<div class="achievements"></div>';
         html+='<div class="stats"></div>';
         html+='</div>';
-        html+='<canvas id="microbes" width="200" height="300">';
+        html+='<canvas id="microbes">';
         html+='Your browser does not support the canvas element.';
         html+='</canvas>';
         html+='<div id="achievement">';
@@ -194,11 +194,11 @@ class Microbes{
 
     }
     updateCanvas(){
-        var newWidth=this.canvas.offsetWidth;
-        var newHeight=this.canvas.offsetHeight
+        var newWidth=this.container.offsetWidth;
+        var newHeight=this.container.offsetHeight
         if(this.width!=newWidth || this.height!=newHeight){
-            this.canvas.width = this.canvas.offsetWidth;
-            this.canvas.height = this.canvas.offsetHeight;
+            this.canvas.width = newWidth;
+            this.canvas.height = newHeight;
             this.width=newWidth;
             this.height=newHeight;
         }

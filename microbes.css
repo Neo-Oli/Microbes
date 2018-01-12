@@ -217,7 +217,8 @@ body.microbes-demosite{
 .microbes-menu-container{
     margin-bottom: 50px;
 }
-#microbes-welcometext{
+#microbes-welcometext, .microbes-nojs{
+
     position: absolute;
     top:0px;
     left: 0px;
@@ -255,4 +256,5 @@ body.microbes-demosite{
     opacity:1;
     pointer-events:all;
 }
+
 

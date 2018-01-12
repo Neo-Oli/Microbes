@@ -27,6 +27,7 @@ class Ui{
         this.stats.manualfed=0;
         this.stats.autofed=0;
         this.welcometexthidden=false
+        this.savetime=new Date().getTime();
 
         var ui=this;
 
@@ -56,6 +57,14 @@ class Ui{
         html+='</div>';
         html+='<div class="microbes-button microbes-resetgame">Reset Game</div>';
         html+='</div>';
+
+        html+='<div id="microbes-oversavedmenu" class="microbes-popup">';
+        html+='<div class="microbes-menu-title">';
+        html+='You have opened the game in another tab.';
+        html+='</div>';
+        html+='<div class="microbes-button microbes-startgame">Start Game again</div>';
+        html+='</div>';
+
         html+='<div id="microbes-achievement">';
         html+='<div class="microbes-achievement-icon">ICON</div>';
         html+='<div class="microbes-achievement-title">Achievement unlocked</div>';
@@ -99,6 +108,16 @@ class Ui{
                 }
             });
         }
+        var elements=this.container.querySelectorAll(".microbes-startgame");
+        for(var i=0;i<elements.length;i++){
+            element=elements[i];
+            element.addEventListener("click",function(e){
+                    ui.save(true);
+                    ui.container.querySelector("#microbes-oversavedmenu").classList.remove("microbes-popupshown");
+                    ui.controller.play();
+
+            });
+        }
 
         this.container.classList.add("microbes-container");
         this.canvas = this.container.querySelector("canvas");
@@ -133,8 +152,14 @@ class Ui{
     question(text){
         return confirm(text);
     }
-    save(){
+    save(oversave=false){
         if (typeof(Storage) !== "undefined") {
+            var oldobj=JSON.parse(localStorage.getItem("MicrobesSave_"+this.id));
+            if(oldobj&&oldobj.savetime>this.savetime && !oversave){
+                this.overSaved();
+                return;
+            }
+
             var obj={};
             obj.microbes=[];
             //microbes
@@ -156,6 +181,8 @@ class Ui{
                 }
             }
             obj.stats=this.stats;
+            this.savetime=new Date().getTime();
+            obj.savetime=this.savetime;
             localStorage.setItem("MicrobesSave_"+this.id, JSON.stringify(obj));
             //localStorage.setItem("MicrobesSave_"+this.id, JSON.stringify(obj,function(key, val) {
             //if (val != null && typeof val == "object") {
@@ -330,6 +357,10 @@ class Ui{
         if(this.microbes.length<=0){
             this.container.querySelector("#microbes-deathmenu").classList.add("microbes-popupshown");
         }
+    }
+    overSaved(){
+            this.container.querySelector("#microbes-oversavedmenu").classList.add("microbes-popupshown");
+            this.controller.stop();
     }
 
     draw(){

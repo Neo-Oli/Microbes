@@ -1,9 +1,10 @@
 class Achievement{
-    constructor(ui,name, blurb, code) {
+    constructor(ui,icon,name, blurb, code) {
         this.ui=ui;
         this.name=name;
         this.blurb=blurb;
         this.code=code;
+        this.icon=icon;
         this.done=false;
     }
     check(){
@@ -21,5 +22,10 @@ class Achievement{
     }
     addToQ(){
        this.ui.achievementQ.push(this);
+    }
+    save(){
+        var obj=this;
+        delete obj.ui;
+        return obj;
     }
 }

@@ -1,6 +1,6 @@
 class Microbe extends Entity{
-    constructor(x=null,y=null){
-        super(x,y);
+    constructor(ui){
+        super(ui);
         this.target=null;
         this.targetangle=300;
         this.path=[];
@@ -35,10 +35,15 @@ class Microbe extends Entity{
         this.maxs=100;
         this.mins=25;
         this.sups=10;
-        this.maxl=70;
+        this.maxl=100;
         this.minl=30;
         this.supl=10;
         this.getRandomColor();
+    }
+    save(){
+        var obj=super.save();
+        delete obj.target;
+        return obj;
     }
     mutate(){
         this.x+=this.size;
@@ -81,7 +86,7 @@ class Microbe extends Entity{
                     //illegal mutations are punished
                     this.fullhealth-=reach;
                 }
-                if(value>max){
+                if(value>=max){
                     value=max;
                     //illegal mutations are punished
                     this.fullhealth-=reach;
@@ -278,7 +283,7 @@ class Microbe extends Entity{
     tick(){
         if(this.dying){
             this.dying--;
-            this.color=[85,85,85];
+            this.color=[0,0,33];
             if(this.dying % 5==0){
                 this.y++;
             }

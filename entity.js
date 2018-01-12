@@ -2,13 +2,21 @@ class Entity{
     constructor(ui) {
         this.ui=ui;
         this.color=[255,0,0];
-        var p=this.randompos();
-        this.x=p[0];
-        this.y=p[1];
+        this.setRandomPos();
         this.fullhealth=2000
         this.health=this.fullhealth;
         this.size=2;
         this.angle=0;
+    }
+    save(){
+        var obj=this;
+        delete obj.ui;
+        return obj;
+    }
+    setRandomPos(nearx=null,neary=null,near=0){
+        var p=this.randompos(nearx,neary,near);
+        this.x=p[0];
+        this.y=p[1];
     }
     randompos(nearx=null,neary=null,near=0){
         if(nearx!==null){

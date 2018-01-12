@@ -649,7 +649,7 @@ class Ui{
         }
     }
     masterrace(){
-        i=new Microbe(this);
+        var i=new Microbe(this);
         i.speed=1000;
         i.searchradius=1000;
         this.microbes[0]=i;

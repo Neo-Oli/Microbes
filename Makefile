@@ -1,4 +1,4 @@
-JS:= achievement.js entity.js food.js microbe.js microbes.js
+JS:= achievement.js entity.js food.js microbe.js microbes.js ui.js
 CSS:= microbes.css
 minify: vendor/autoload.php dist/microbes.min.js dist/microbes.min.css
 dist/microbes.min.js: $(JS)

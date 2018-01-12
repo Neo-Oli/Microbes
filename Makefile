@@ -26,8 +26,6 @@ dist/microbes.min.css: microbes.css
 .PHONY: clean
 clean:
 	rm -frv vendor
-	rm -frv microbes.min.js
-	rm -frv microbes.min.css
 
 .PHONY: deps_update
 deps_update:

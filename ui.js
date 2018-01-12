@@ -40,6 +40,8 @@ class Ui{
         html+='<div class="mircobes-sub-title">Autofeed</div>';
         html+='<label>less food</label><label>more food</label><input type="range" min="-250" max="500" class="microbes-slider microbes-reversed" id="microbes-foodmodslider" data-variable="foodmod"><div class="microbes-reset" data-target="microbes-foodmodslider">⟲</div>';
         //html+='<label>slower</label><label>faster</label><input type="range" min="10" max="5000" class="slider" id="tpsslider" data-variable="tps"><div class="reset" data-target="tpsslider">⟲</div>';
+        html+='<div class="microbes-button microbes-pausegame">Pause Game</div>';
+        html+='<div class="microbes-button microbes-playgame microbes-button-hidden">Play Game</div>';
         html+='<div class="microbes-button microbes-resetgame">Reset Game</div>';
         html+='<div class="mircobes-sub-title">Achievements</div>';
         html+='<div class="microbes-achievements"></div>';
@@ -55,7 +57,6 @@ class Ui{
         html+='<div class="microbes-menu-title">';
         html+='All microbes have died :(';
         html+='</div>';
-        html+='<div class="microbes-button microbes-resetgame">Reset Game</div>';
         html+='</div>';
 
         html+='<div id="microbes-oversavedmenu" class="microbes-popup">';
@@ -108,6 +109,38 @@ class Ui{
                 }
             });
         }
+
+        var elements=this.container.querySelectorAll(".microbes-pausegame");
+        for(var i=0;i<elements.length;i++){
+            element=elements[i];
+            element.addEventListener("click",function(e){
+                    ui.controller.stop();
+                    var buttons=ui.container.querySelectorAll(".microbes-pausegame")
+                    for(var l=0;l<buttons.length;l++){
+                        buttons[l].classList.add("microbes-button-hidden");
+                    }
+                    var buttons=ui.container.querySelectorAll(".microbes-playgame")
+                    for(var l=0;l<buttons.length;l++){
+                        buttons[l].classList.remove("microbes-button-hidden");
+                    }
+            });
+        }
+        var elements=this.container.querySelectorAll(".microbes-playgame");
+        for(var i=0;i<elements.length;i++){
+            element=elements[i];
+            element.addEventListener("click",function(e){
+                    ui.controller.play();
+                    var buttons=ui.container.querySelectorAll(".microbes-pausegame")
+                    for(var l=0;l<buttons.length;l++){
+                        buttons[l].classList.remove("microbes-button-hidden");
+                    }
+                    var buttons=ui.container.querySelectorAll(".microbes-playgame")
+                    for(var l=0;l<buttons.length;l++){
+                        buttons[l].classList.add("microbes-button-hidden");
+                    }
+            });
+        }
+
         var elements=this.container.querySelectorAll(".microbes-startgame");
         for(var i=0;i<elements.length;i++){
             element=elements[i];

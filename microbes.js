@@ -3,13 +3,18 @@ class Microbes{
     constructor(id){
         this.id=id;
         this.ui=new Ui(id,this);
+        this.playing=false;
     }
     play(){
         this.ui.stop=false;
-        this.ui.play();
+        if(!this.playing){
+            this.ui.play();
+        }
+        this.playing=true;
     }
     stop(){
         this.ui.stop=true;
+        this.playing=false;
 
     }
     reset(){

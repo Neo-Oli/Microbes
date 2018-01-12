@@ -21,6 +21,11 @@ body.microbes-demosite{
     position: relative;
     overflow: hidden;
     --size:250px;
+     user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
 }
 .microbes-menu{
     width: var(--size);
@@ -191,7 +196,12 @@ body.microbes-demosite{
     font-weight:500;
     font-size: 23px;
 }
-
+.microbes-button.microbes-playgame{
+    background-color: #4b4bab; 
+}
+.microbes-button.microbes-pausegame{
+    background-color: #4b4bab; 
+}
 .microbes-button{
     cursor:pointer;
     border-radius:3px;
@@ -200,6 +210,9 @@ body.microbes-demosite{
     float: left;
     clear: both;
     margin-bottom: 15px;
+}
+.microbes-button-hidden{
+    display:none;
 }
 
 .microbes-stats{
@@ -256,5 +269,4 @@ body.microbes-demosite{
     opacity:1;
     pointer-events:all;
 }
-
 

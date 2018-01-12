@@ -62,7 +62,7 @@ class Ui{
         html+='<div class="microbes-menu-title">';
         html+='You have opened the game in another tab.';
         html+='</div>';
-        html+='<div class="microbes-button microbes-startgame">Start Game again</div>';
+        html+='<div class="microbes-button microbes-startgame">Play here</div>';
         html+='</div>';
 
         html+='<div id="microbes-achievement">';

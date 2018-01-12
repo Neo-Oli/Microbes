@@ -81,8 +81,9 @@ class Ui{
             element.value=this[element.getAttribute('data-variable')];
             element.setAttribute("data-default",element.value);
             element.addEventListener("change",function(e){
-                element=e.originalTarget;
+                element=e.target;
                 var variable=element.getAttribute('data-variable');
+
                 ui[variable]=parseInt(element.value);
             });
         }

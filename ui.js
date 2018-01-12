@@ -50,6 +50,12 @@ class Ui{
         html+='Your browser does not support the canvas element.';
         html+='</canvas>';
         html+='<div id="microbes-welcometext">Hi, feed us please :(</div>';
+        html+='<div id="microbes-deathmenu" class="microbes-popup">';
+        html+='<div class="microbes-menu-title">';
+        html+='All microbes have died :(';
+        html+='</div>';
+        html+='<div class="microbes-button microbes-resetgame">Reset Game</div>';
+        html+='</div>';
         html+='<div id="microbes-achievement">';
         html+='<div class="microbes-achievement-icon">ICON</div>';
         html+='<div class="microbes-achievement-title">Achievement unlocked</div>';
@@ -88,7 +94,7 @@ class Ui{
         for(var i=0;i<elements.length;i++){
             element=elements[i];
             element.addEventListener("click",function(e){
-                if(ui.question("Are you sure you want to reset your game? This will also reset all you achievements")){
+                if(ui.microbes.length<=0 || ui.question("Are you sure you want to reset your game? This will also reset all you achievements")){
                     ui.controller.reset();
                 }
             });
@@ -202,6 +208,7 @@ class Ui{
 
 
             this.stats=Object.assign(this.stats,obj.stats);
+            this.save();
 
         } else {
             console.log("Your browser doesn't support save/load");
@@ -312,17 +319,18 @@ class Ui{
 
 
     hidewelcometext(){
-        console.log("1");
-    if(!this.welcometexthidden){
-        console.log("2");
-        if(this.stats.manualfed>=1){
-        console.log("3");
-            this.welcometexthidden=true;
-            this.container.querySelector("#microbes-welcometext").classList.add("microbes-hidden");
+        if(!this.welcometexthidden){
+            if(this.stats.manualfed>=1){
+                this.welcometexthidden=true;
+                this.container.querySelector("#microbes-welcometext").classList.add("microbes-hidden");
+            }
         }
     }
+    showDeathMenu(){
+        if(this.microbes.length<=0){
+            this.container.querySelector("#microbes-deathmenu").classList.add("microbes-popupshown");
+        }
     }
-
 
     draw(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -503,6 +511,7 @@ class Ui{
                 ui.displayAchievements();
                 ui.updateCanvas();
                 ui.hidewelcometext();
+                ui.showDeathMenu();
                 //if(maxspeed){
                 //if(speedvelocity==2||speedvelocity==-2){
                 //speedstep*=2;

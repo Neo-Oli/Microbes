@@ -107,7 +107,7 @@ body.microbes-demosite{
     left: 0px;
     max-width: 300px;
     margin: 0 auto;
-    background-color: #222222;
+    background-color: #333333;
     color: white;
     padding: 10px 20px;
     border-radius: 30px;
@@ -234,5 +234,24 @@ body.microbes-demosite{
 
 #microbes-welcometext.microbes-hidden{
     opacity:0;
+}
+.microbes-popup{
+    position: absolute;
+    top: 25%;
+    left: 0px;
+    max-width: 300px;
+    margin: 0 auto;
+    background-color: #333333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    pointer-events:none;
+}
+.microbes-popup.microbes-popupshown{
+    opacity:1;
+    pointer-events:all;
 }
 

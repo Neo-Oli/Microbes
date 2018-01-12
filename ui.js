@@ -181,6 +181,9 @@ class Ui{
             } for(var e in obj.microbes){
                 var microbe=obj.microbes[e];
                 microbe=Object.assign(new Microbe(this),microbe);
+                if(microbe.x>=this.width || microbe.y>=this.height ){
+                    microbe.setRandomPos();
+                }
                 this.microbes.push(microbe);
             }
             if(this.microbes.length<=0){

@@ -43,6 +43,7 @@ class Microbe extends Entity{
     save(){
         var obj=super.save();
         delete obj.target;
+        delete obj.path;
         return obj;
     }
     mutate(){

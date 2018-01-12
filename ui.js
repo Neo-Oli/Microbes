@@ -114,30 +114,30 @@ class Ui{
         for(var i=0;i<elements.length;i++){
             element=elements[i];
             element.addEventListener("click",function(e){
-                    ui.controller.stop();
-                    var buttons=ui.container.querySelectorAll(".microbes-pausegame")
-                    for(var l=0;l<buttons.length;l++){
-                        buttons[l].classList.add("microbes-button-hidden");
-                    }
-                    var buttons=ui.container.querySelectorAll(".microbes-playgame")
-                    for(var l=0;l<buttons.length;l++){
-                        buttons[l].classList.remove("microbes-button-hidden");
-                    }
+                ui.controller.stop();
+                var buttons=ui.container.querySelectorAll(".microbes-pausegame")
+                for(var l=0;l<buttons.length;l++){
+                    buttons[l].classList.add("microbes-button-hidden");
+                }
+                var buttons=ui.container.querySelectorAll(".microbes-playgame")
+                for(var l=0;l<buttons.length;l++){
+                    buttons[l].classList.remove("microbes-button-hidden");
+                }
             });
         }
         var elements=this.container.querySelectorAll(".microbes-playgame");
         for(var i=0;i<elements.length;i++){
             element=elements[i];
             element.addEventListener("click",function(e){
-                    ui.controller.play();
-                    var buttons=ui.container.querySelectorAll(".microbes-pausegame")
-                    for(var l=0;l<buttons.length;l++){
-                        buttons[l].classList.remove("microbes-button-hidden");
-                    }
-                    var buttons=ui.container.querySelectorAll(".microbes-playgame")
-                    for(var l=0;l<buttons.length;l++){
-                        buttons[l].classList.add("microbes-button-hidden");
-                    }
+                ui.controller.play();
+                var buttons=ui.container.querySelectorAll(".microbes-pausegame")
+                for(var l=0;l<buttons.length;l++){
+                    buttons[l].classList.remove("microbes-button-hidden");
+                }
+                var buttons=ui.container.querySelectorAll(".microbes-playgame")
+                for(var l=0;l<buttons.length;l++){
+                    buttons[l].classList.add("microbes-button-hidden");
+                }
             });
         }
 
@@ -145,9 +145,9 @@ class Ui{
         for(var i=0;i<elements.length;i++){
             element=elements[i];
             element.addEventListener("click",function(e){
-                    ui.save(true);
-                    ui.container.querySelector("#microbes-oversavedmenu").classList.remove("microbes-popupshown");
-                    ui.controller.play();
+                ui.save(true);
+                ui.container.querySelector("#microbes-oversavedmenu").classList.remove("microbes-popupshown");
+                ui.controller.play();
 
             });
         }
@@ -161,13 +161,15 @@ class Ui{
         this.foods=[];
         this.stats.counter=0;
         this.canvas.addEventListener("mousedown",function(event){
-            for(var i=0;i<ui.feedvol;i++){
-                var food=new Food(ui);
-                var p=food.randompos(event.layerX,event.layerY, ui.feedspread);
-                food.x=p[0];
-                food.y=p[1];
-                ui.foods.push(food);
-                ui.stats.manualfed++;
+            if(ui.controller.playing){
+                for(var i=0;i<ui.feedvol;i++){
+                    var food=new Food(ui);
+                    var p=food.randompos(event.layerX,event.layerY, ui.feedspread);
+                    food.x=p[0];
+                    food.y=p[1];
+                    ui.foods.push(food);
+                    ui.stats.manualfed++;
+                }
             }
         });
         menutrigger.addEventListener("click",function(e){
@@ -392,8 +394,8 @@ class Ui{
         }
     }
     overSaved(){
-            this.container.querySelector("#microbes-oversavedmenu").classList.add("microbes-popupshown");
-            this.controller.stop();
+        this.container.querySelector("#microbes-oversavedmenu").classList.add("microbes-popupshown");
+        this.controller.stop();
     }
 
     draw(){

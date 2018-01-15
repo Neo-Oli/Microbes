@@ -65,13 +65,15 @@ class Entity{
         return "hsla("+color[0]+","+color[1]+"%,"+color[2]+"%,"+opacity+")";
     }
     rotate(step){
-        var old=this.angle
-        var newangle=this.angle+step;
-        if(newangle<0){
-            newangle=Math.floor(newangle);
+        var old=step;
+        if(step<0){
+            step=Math.floor(step);
         }else{
-            newangle=Math.ceil(newangle);
+            step=Math.ceil(step);
         }
+        this.ui.debugvar=[old,step];
+        var newangle=this.angle+step;
+
         this.angle=this.positiveAngle(newangle);
     }
     distanceTo(e){
@@ -82,7 +84,7 @@ class Entity{
         return c;
     }
     positiveAngle(angle){
-        while(angle>360){
+        while(angle>=360){
             angle=angle-360;
         }
         while(angle<0){

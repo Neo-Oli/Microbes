@@ -177,6 +177,7 @@ class Microbe extends Entity{
         }
         if(this.targetangle!=this.angle){
             if((this.targetangle - this.angle + 360) % 360 < 180){
+                this.ui.debugvar=81;
                 this.rotate(this.speed/(this.rotatebreak/100));
                 if((this.targetangle - this.angle + 360) % 360 > 180){
                     this.angle=this.targetangle

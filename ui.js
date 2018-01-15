@@ -431,7 +431,7 @@ class Ui{
             html+=this.statline("foods",this.foods.length);
             html+=this.statline("Food Chance",this.foodchance());
             if(this.debugvar!==null){
-                html+=this.statline("debugvar",debugvar);
+                html+=this.statline("debugvar",this.debugvar);
             }
         }
         html+=this.statline("Alive",this.microbes.length);

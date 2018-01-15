@@ -59,6 +59,13 @@ class Ui{
         html+='</div>';
         html+='</div>';
 
+        html+='<div id="microbes-achievement">';
+        html+='<div class="microbes-achievement-icon">ICON</div>';
+        html+='<div class="microbes-achievement-title">Achievement unlocked</div>';
+        html+='<div class="microbes-achievement-name">null</div>';
+        html+='<div class="microbes-achievement-blurb">null</div>';
+        html+='</div>';
+
         html+='<div id="microbes-oversavedmenu" class="microbes-popup">';
         html+='<div class="microbes-menu-title">';
         html+='You have opened the game in another tab.';
@@ -66,12 +73,7 @@ class Ui{
         html+='<div class="microbes-button microbes-startgame">Play here</div>';
         html+='</div>';
 
-        html+='<div id="microbes-achievement">';
-        html+='<div class="microbes-achievement-icon">ICON</div>';
-        html+='<div class="microbes-achievement-title">Achievement unlocked</div>';
-        html+='<div class="microbes-achievement-name">null</div>';
-        html+='<div class="microbes-achievement-blurb">null</div>';
-        html+='</div>';
+
 
         this.container.innerHTML=html;
         var inputs=this.container.querySelectorAll("input");

@@ -8,19 +8,19 @@ class Microbe extends Entity{
         this.size=4;
         this.maxsize=5;
         this.speed=10
-        this.fullhealth=3000;
+        this.fullhealth=1500;
         this.health=this.fullhealth;
         this.wait=0;
         this.searchradius=100;
         this.dying=null;
         this.generation=0;
-        this.mutatechance=1 //lower = more evolutions
-        this.mutaterange=3 //range of evolution
+        this.mutatechance=3 //lower = more evolutions
+        this.mutaterange=1 //range of evolution
         this.mutations=0;
         this.dyinglength=100;
         this.traveled=0;
         this.traveledlast=0;
-        this.rotatebreak=10;
+        this.rotatebreak=1000;
 
 
         this.defaultcolors=[
@@ -177,12 +177,12 @@ class Microbe extends Entity{
         }
         if(this.targetangle!=this.angle){
             if((this.targetangle - this.angle + 360) % 360 < 180){
-                this.rotate(this.speed/this.rotatebreak);
+                this.rotate(this.speed/(this.rotatebreak/100));
                 if((this.targetangle - this.angle + 360) % 360 > 180){
                     this.angle=this.targetangle
                 }
             }else{
-                this.rotate(-this.speed/this.rotatebreak);
+                this.rotate(-this.speed/(this.rotatebreak/100));
                 if((this.targetangle - this.angle + 360) % 360 < 180){
                     this.angle=this.targetangle
                 }

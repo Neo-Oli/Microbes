@@ -185,6 +185,7 @@ class Ui{
             this.load();
         }else{
             this.defaultMicrobes();
+            this.save(true);
         }
     }
     question(text){

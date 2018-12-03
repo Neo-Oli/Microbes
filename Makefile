@@ -1,7 +1,7 @@
 JS:= achievement.js entity.js food.js microbe.js microbes.js ui.js
 CSS:= microbes.css
 minify: vendor/autoload.php dist/microbes.min.js dist/microbes.min.css
-dist/microbes.min.js: $(JS)
+dist/microbes.min.js: $(JS) dist
 	php -r "\
 		require __DIR__ . '/vendor/autoload.php';\
 		use MatthiasMullie\Minify;\
@@ -12,7 +12,7 @@ dist/microbes.min.js: $(JS)
 		\$$minifier->minify('$@');\
 	"
 
-dist/microbes.min.css: microbes.css
+dist/microbes.min.css: microbes.css dist
 	php -r "\
 		require __DIR__ . '/vendor/autoload.php';\
 		use MatthiasMullie\Minify;\
@@ -26,6 +26,7 @@ dist/microbes.min.css: microbes.css
 .PHONY: clean
 clean:
 	rm -frv vendor
+	rm -frv dist
 
 .PHONY: deps_update
 deps_update:
@@ -39,4 +40,6 @@ composer.lock: composer.json
 vendor/autoload.php: composer.lock
 	composer install
 	touch $@
+dist:
+	mkdir -p $@
 

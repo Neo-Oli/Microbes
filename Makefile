@@ -30,8 +30,8 @@ clean:
 	rm -frv vendor
 	rm -frv dist
 
-.PHONY: deps_update
-deps_update:
+.PHONY: update
+update:
 	composer update
 .PHONY: setup
 setup: vendor/autoload.php

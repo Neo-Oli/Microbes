@@ -1,6 +1,8 @@
-class Food extends Entity{
+import Entity from './entity'
+export default class Food extends Entity{
     constructor(ui){
         super(ui);
+        this.name="Food"
         this.ui.checkAchievements()
         this.color=[255,255,255];
         this.size=2

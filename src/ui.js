@@ -1,5 +1,7 @@
-
-class Ui{
+import Achievement from './achievement'
+import Microbe from './microbe'
+import Food from './food'
+export default class Ui{
     constructor(id,controller,dontload=false){
         this.controller=controller;
         this.id=id;
@@ -215,7 +217,7 @@ class Ui{
             //achievements
             obj.achievements={};
             for(var e in this.achievements){
-                if(this.achievements[e].constructor.name=="Achievement"){
+                if(this.achievements[e].name=="Achievement"){
                     obj.achievements[e]=this.achievements[e].done;
                 }
             }
@@ -332,7 +334,7 @@ class Ui{
     }
     checkAchievements(){
         for(var i in this.achievements){
-            if(this.achievements[i].constructor.name=="Achievement"){
+            if(this.achievements[i].name=="Achievement"){
                 var result=this.achievements[i].check();
             }
         }
@@ -366,7 +368,7 @@ class Ui{
         for(var i in this.achievements){
             var a=this.achievements[i];
             var html="";
-            if(a.constructor.name=="Achievement"){
+            if(a.name=="Achievement"){
                 var done="";
                 if(a.done){
                     done="microbes-done";

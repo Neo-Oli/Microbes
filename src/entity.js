@@ -1,4 +1,4 @@
-class Entity{
+export default class Entity{
     constructor(ui) {
         this.ui=ui;
         this.color=[255,0,0];

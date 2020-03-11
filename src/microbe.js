@@ -1,4 +1,5 @@
-class Microbe extends Entity{
+import Entity from './entity'
+export default class Microbe extends Entity{
     constructor(ui){
         super(ui);
         this.target=null;
@@ -229,7 +230,7 @@ class Microbe extends Entity{
         var possiblefood=new Array();
         for(var e=0;e<this.ui.foods.length;e++){
             var food=this.ui.foods[e];
-            if(food.constructor.name=="Food"){
+            if(food.name=="Food"){
                 var distance=this.distanceTo(food);
                 if(distance<=this.searchradius){
                     possiblefood.push([distance,e]);
@@ -266,7 +267,7 @@ class Microbe extends Entity{
     eat(food){
         food.health=0;
         this.looseTarget();
-        if(food.constructor.name!="Food"){
+        if(food.name!="Food"){
             //random target
             return
         }

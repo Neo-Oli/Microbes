@@ -1,0 +1,20 @@
+{
+  "name": "Microbes",
+  "version": "1.0.0",
+  "description": "A Javascript simulation/game of Microbes.",
+  "main": "src/microbes.js",
+  "repository": "git@github.com:Neo-Oli/Microbes.git",
+  "author": "Oliver Schmidhauser <oli@glow.li>",
+  "license": "GPL-3.0",
+  "scripts": {
+    "build": "webpack --mode=development",
+    "prod": "webpack --mode=production"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.11",
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.42.0"
+  }
+}

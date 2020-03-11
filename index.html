@@ -11,17 +11,12 @@
         <div id="microbes1">
             <div class="microbes-nojs">Browser game that requires Javascript.</div>
         </div>
-        <script src="entity.js"></script>
-        <script src="achievement.js"></script>
-        <script src="microbe.js"></script>
-        <script src="food.js"></script>
-        <script src="ui.js"></script>
-        <script src="microbes.js"></script>
-        <!--<script src="microbes.min.js"></script>-->
+        <script src="dist/bundle.js"></script>
         <script>
-            window.onload =  function() {
-                game=new Microbes("microbes1");
-                game.play(); }
+            window.onload = function() {
+                game=microbes.microbes("microbes1");
+                game.play()
+            }
         </script>
     </body>
 </html>

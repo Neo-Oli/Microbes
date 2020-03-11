@@ -1,10 +1,11 @@
-class Achievement{
+export default class Achievement{
     constructor(ui,icon,name, blurb, code) {
         this.ui=ui;
         this.name=name;
         this.blurb=blurb;
         this.code=code;
         this.icon=icon;
+        this.name="Achievement";
         this.done=false;
     }
     check(){

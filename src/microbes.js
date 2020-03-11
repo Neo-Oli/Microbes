@@ -1,5 +1,5 @@
-"use strict";
-class Microbes{
+import Ui from './ui'
+export default class Microbes{
     constructor(id){
         this.id=id;
         this.ui=new Ui(id,this);

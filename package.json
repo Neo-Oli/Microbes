@@ -1,5 +1,5 @@
 {
-  "name": "Microbes",
+  "name": "microbes",
   "version": "1.0.0",
   "description": "A Javascript simulation/game of Microbes.",
   "main": "src/microbes.js",

@@ -217,7 +217,7 @@ export default class Ui{
             //achievements
             obj.achievements={};
             for(var e in this.achievements){
-                if(this.achievements[e].name=="Achievement"){
+                if(this.achievements[e].type=="Achievement"){
                     obj.achievements[e]=this.achievements[e].done;
                 }
             }
@@ -334,7 +334,7 @@ export default class Ui{
     }
     checkAchievements(){
         for(var i in this.achievements){
-            if(this.achievements[i].name=="Achievement"){
+            if(this.achievements[i].type=="Achievement"){
                 var result=this.achievements[i].check();
             }
         }
@@ -368,7 +368,7 @@ export default class Ui{
         for(var i in this.achievements){
             var a=this.achievements[i];
             var html="";
-            if(a.name=="Achievement"){
+            if(a.type=="Achievement"){
                 var done="";
                 if(a.done){
                     done="microbes-done";

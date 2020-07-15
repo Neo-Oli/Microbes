@@ -5,7 +5,7 @@ export default class Achievement{
         this.blurb=blurb;
         this.code=code;
         this.icon=icon;
-        this.name="Achievement";
+        this.type="Achievement";
         this.done=false;
     }
     check(){

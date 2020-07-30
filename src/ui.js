@@ -430,8 +430,8 @@ export default class Ui{
         var html="";
         html+=this.statline("Alive",this.microbes.length);
         html+=this.statline("Deaths",this.stats.deaths);
-        html+=this.statline("Food",this.foods.length);
         html+=this.statline("Total",this.stats.deaths+this.microbes.length);
+        html+=this.statline("Food",this.foods.length);
         html+=this.statlineMinMax(this.microbes,"generation", "Generations");
         html+=this.statlineMinMax(this.microbes,"size","Sizes");
         html+=this.statlineMinMax(this.microbes,"mutations", "Number of mutations");

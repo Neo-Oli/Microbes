@@ -43,7 +43,7 @@ export default class Ui {
     html += '<div class="mircobes-sub-title">Autofeed</div>'
     html += '<label>less food</label><label>more food</label><input type="range" min="-250" max="500" class="microbes-slider microbes-reversed slider" id="microbes-foodmodslider" data-variable="foodmod"><div class="microbes-reset reset" data-target="microbes-foodmodslider">⟲</div>'
     html += '<div class="mircobes-sub-title">Game Speed</div>'
-    html += '<label>slower</label><label>faster</label><input type="range" min="10" max="5000" class="slider" id="tpsslider" data-variable="tps"><div class="reset" data-target="tpsslider">⟲</div>'
+    html += '<label>slower</label><label>faster</label><input type="range" min="1" max="1000" class="slider" id="tpsslider" data-variable="tps"><div class="reset" data-target="tpsslider">⟲</div>'
     html += '<div class="microbes-button microbes-pausegame">Pause Game</div>'
     html += '<div class="microbes-button microbes-playgame microbes-button-hidden">Play Game</div>'
     html += '<div class="microbes-button microbes-resetgame">Reset Game</div>'
@@ -317,8 +317,6 @@ export default class Ui {
     this.addAchievement('f5', new Achievement(this, '⠲<br>10000', 'Feed 10000 times', 'Does your finger hurt now?', function () { return ui.stats.manualfed >= 10000 }))
     this.addAchievement('c4', 'Special Colors')
     this.addAchievement('c1', new Achievement(this, `<span style="color:#FFFFFF">${m}</span>`, 'Breed a white microbe', "Can't be seen in the snow.", function () { for (const e in ui.microbes) { if (ui.microbes[e].color[2] === 100) { return true } } }))
-    this.addAchievement('c2', new Achievement(this, `<span style="color:#C0FFEE">${m}</span>`, 'Breed a #C0FFEE colored microbe', 'Is this one faster?', function () { for (const e in ui.microbes) { if (ui.microbes[e].color.toString() === [164, 100, 88].toString()) { return true } } }))
-    this.addAchievement('c3', new Achievement(this, `<span style="color:#BADA55">${m}</span>`, 'Breed a #BADA55 colored microbe', 'This is the best microbe', function () { for (const e in ui.microbes) { if (ui.microbes[e].color.toString() === [74, 64, 59].toString()) { return true } } }))
     this.displayAchievements()
     this.menuAchievements()
   }

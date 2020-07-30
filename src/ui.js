@@ -29,6 +29,7 @@ export default class Ui{
         this.stats.manualfed=0;
         this.stats.autofed=0;
         this.welcometexthidden=false
+        this.mouseDown=false;
         this.savetime=new Date().getTime();
 
         var ui=this;
@@ -167,15 +168,15 @@ export default class Ui{
         this.stats.counter=0;
         this.canvas.addEventListener("mousedown",function(event){
             if(ui.controller.playing){
-                for(var i=0;i<ui.feedvol;i++){
-                    var food=new Food(ui);
-                    var p=food.randompos(event.layerX,event.layerY, ui.feedspread);
-                    food.x=p[0];
-                    food.y=p[1];
-                    ui.foods.push(food);
-                    ui.stats.manualfed++;
-                }
+                ui.mouseDown=true;
+                ui.manualfeed(event.clientX, event.clientY);
             }
+        });
+        this.canvas.addEventListener("mouseup",function(event){
+            ui.mouseDown=false;
+        });
+        this.canvas.addEventListener("mousemove",function(event){
+            ui.manualfeed(event.clientX, event.clientY);
         });
         menutrigger.addEventListener("click",function(e){
             ui.container.classList.toggle("microbes-menushown");
@@ -498,6 +499,18 @@ export default class Ui{
         if(this.stats.counter % this.foodchance()==0 && this.stats.manualfed>0){
             this.foods.push(new Food(this));
             this.stats.autofed++;
+        }
+    }
+    manualfeed(x,y){
+        if(this.mouseDown){
+            for(var i=0;i<this.feedvol;i++){
+                var food=new Food(this);
+                var p=food.randompos(x,y, this.feedspread);
+                food.x=p[0];
+                food.y=p[1];
+                this.foods.push(food);
+                this.stats.manualfed++;
+            }
         }
     }
     foodchance(){

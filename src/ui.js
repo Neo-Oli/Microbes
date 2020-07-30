@@ -42,7 +42,7 @@ export default class Ui {
     html += '<div class="microbes-menu-title">Menu</div>'
     html += '<div class="mircobes-sub-title">Autofeed</div>'
     html += '<label>less food</label><label>more food</label><input type="range" min="-250" max="500" class="microbes-slider microbes-reversed" id="microbes-foodmodslider" data-variable="foodmod"><div class="microbes-reset" data-target="microbes-foodmodslider">⟲</div>'
-    html+='<label>slower</label><label>faster</label><input type="range" min="10" max="5000" class="slider" id="tpsslider" data-variable="tps"><div class="reset" data-target="tpsslider">⟲</div>';
+    html += '<label>slower</label><label>faster</label><input type="range" min="10" max="5000" class="slider" id="tpsslider" data-variable="tps"><div class="reset" data-target="tpsslider">⟲</div>'
     html += '<div class="microbes-button microbes-pausegame">Pause Game</div>'
     html += '<div class="microbes-button microbes-playgame microbes-button-hidden">Play Game</div>'
     html += '<div class="microbes-button microbes-resetgame">Reset Game</div>'
@@ -225,6 +225,15 @@ export default class Ui {
       this.savetime = new Date().getTime()
       obj.savetime = this.savetime
       localStorage.setItem(`MicrobesSave_${this.id}`, JSON.stringify(obj))
+      // localStorage.setItem("MicrobesSave_"+this.id, JSON.stringify(obj,function(key, val) {
+      // if (val != null && typeof val == "object") {
+      // if (seen.indexOf(val) >= 0) {
+      // return;
+      // }
+      // seen.push(val);
+      // }
+      // return val;
+      // }));
     } else {
       console.log("Your browser doesn't support save/load")
     }
@@ -575,7 +584,6 @@ export default class Ui {
       }
     }
     function graphicsloop () {
-      const d = new Date().getTime()
       ui.draw()
       fps += 1
       if (!ui.stop) {

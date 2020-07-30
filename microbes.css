@@ -87,7 +87,7 @@ body.microbes-demosite{
 .microbes-menu label{
 
 }
-.microbes-menu .microbes-slider{
+.microbes-menu .slider{
     width: calc(100% - 55px);
     background: transparent;
     border:none;
@@ -99,7 +99,7 @@ body.microbes-demosite{
 
 }
 
-.microbes-container .microbes-reset{
+.microbes-container .reset{
     display: inline-block;
     position: relative;
     bottom: 15px;

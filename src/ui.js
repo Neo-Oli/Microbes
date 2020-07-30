@@ -41,7 +41,8 @@ export default class Ui {
     html += '<div class="microbes-menu-container">'
     html += '<div class="microbes-menu-title">Menu</div>'
     html += '<div class="mircobes-sub-title">Autofeed</div>'
-    html += '<label>less food</label><label>more food</label><input type="range" min="-250" max="500" class="microbes-slider microbes-reversed" id="microbes-foodmodslider" data-variable="foodmod"><div class="microbes-reset" data-target="microbes-foodmodslider">⟲</div>'
+    html += '<label>less food</label><label>more food</label><input type="range" min="-250" max="500" class="microbes-slider microbes-reversed slider" id="microbes-foodmodslider" data-variable="foodmod"><div class="microbes-reset reset" data-target="microbes-foodmodslider">⟲</div>'
+    html += '<div class="mircobes-sub-title">Game Speed</div>'
     html += '<label>slower</label><label>faster</label><input type="range" min="10" max="5000" class="slider" id="tpsslider" data-variable="tps"><div class="reset" data-target="tpsslider">⟲</div>'
     html += '<div class="microbes-button microbes-pausegame">Pause Game</div>'
     html += '<div class="microbes-button microbes-playgame microbes-button-hidden">Play Game</div>'
@@ -91,7 +92,7 @@ export default class Ui {
       })
     }
 
-    const resets = this.container.querySelectorAll('.microbes-reset')
+    const resets = this.container.querySelectorAll('.reset')
     for (let i = 0; i < resets.length; i++) {
       let element = resets[i]
       element.addEventListener('click', function (e) {

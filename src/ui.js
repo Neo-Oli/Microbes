@@ -428,33 +428,32 @@ export default class Ui{
     }
     drawstats(fps, ticks){
         var html="";
-        if(this.debug){
-            html+=this.statline("fps",fps);
-            html+=this.statline("ticks",this.stats.counter);
-            html+=this.statline("ticks/s",ticks);
-            html+=this.statline("foods",this.foods.length);
-            html+=this.statline("Food Chance",this.foodchance());
-            if(this.debugvar!==null){
-                html+=this.statline("debugvar",this.debugvar);
-            }
-        }
         html+=this.statline("Alive",this.microbes.length);
         html+=this.statline("Deaths",this.stats.deaths);
+        html+=this.statline("Food",this.foods.length);
         html+=this.statline("Total",this.stats.deaths+this.microbes.length);
         html+=this.statlineMinMax(this.microbes,"generation", "Generations");
         html+=this.statlineMinMax(this.microbes,"size","Sizes");
-
+        html+=this.statlineMinMax(this.microbes,"mutations", "Number of mutations");
+        html+=this.statlineMinMax(this.microbes,"health", "Current health");
+        html+=this.statlineMinMax(this.microbes,"fullhealth", "Full health");
+        html+=this.statlineMinMax(this.microbes,"size", "Current size");
+        html+=this.statlineMinMax(this.microbes,"minsize", "Minimal size");
+        html+=this.statlineMinMax(this.microbes,"maxsize", "Maximal size");
+        html+=this.statlineMinMax(this.microbes,"speed","Speed");
+        html+=this.statlineMinMax(this.microbes,"mutatechance", "Mutation chance");
+        html+=this.statlineMinMax(this.microbes,"rotatebreak", "Rotation slowdown");
+        html+=this.statlineMinMax(this.microbes,"searchradius", "Search radius");
+        html+=this.statlineMinMax(this.microbes,"mutaterange", "Mutation range");
+        html+=this.statline("Fps",fps);
+        html+=this.statline("Ticks",this.stats.counter);
+        html+=this.statline("Ticks/second",ticks);
         if(this.debug){
-            html+=this.statlineMinMax(this.microbes,"mutations");
-            html+=this.statlineMinMax(this.microbes,"fullhealth");
-            html+=this.statlineMinMax(this.microbes,"minsize");
-            html+=this.statlineMinMax(this.microbes,"maxsize");
-            html+=this.statlineMinMax(this.microbes,"speed");
-            html+=this.statlineMinMax(this.microbes,"mutatechance");
-            html+=this.statlineMinMax(this.microbes,"mutaterange");
-            html+=this.statlineMinMax(this.microbes,"traveledlast");
-            html+=this.statlineMinMax(this.microbes,"rotatebreak");
-            html+=this.statlineMinMax(this.microbes,"searchradius");
+            if(this.debugvar!==null){
+                html+=this.statline("debugvar",this.debugvar);
+            }
+            html+=this.statline("Food Chance",this.foodchance());
+            html+=this.statlineMinMax(this.microbes,"traveledlast", );
         }
         this.menustats.innerHTML=html;
     }
@@ -478,7 +477,9 @@ export default class Ui{
         if(!title){
             title=key;
         }
-        var text=title+": Between "+min+" and "+max+"<br>";
+        min=Math.floor(min);
+        max=Math.floor(max);
+        var text=title+": "+min+" - "+max+"<br>";
         if(min==max){
             text=title+": "+min+"<br>";
         }

@@ -8,13 +8,20 @@
   "license": "GPL-3.0",
   "scripts": {
     "build": "webpack --mode=development",
-    "prod": "webpack --mode=production"
+    "prod": "webpack --mode=production",
+    "lint": "eslint src/*.js --color --ext js --fix"
   },
   "devDependencies": {
-    "webpack-cli": "*",
     "@babel/core": "*",
     "@babel/preset-env": "*",
     "babel-loader": "*",
-    "webpack": "*"
+    "eslint": "*",
+    "eslint-config-standard": "*",
+    "eslint-plugin-import": "*",
+    "eslint-plugin-node": "*",
+    "eslint-plugin-promise": "*",
+    "eslint-plugin-standard": "*",
+    "webpack": "*",
+    "webpack-cli": "*"
   }
 }

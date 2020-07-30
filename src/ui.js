@@ -225,15 +225,6 @@ export default class Ui {
       this.savetime = new Date().getTime()
       obj.savetime = this.savetime
       localStorage.setItem(`MicrobesSave_${this.id}`, JSON.stringify(obj))
-      // localStorage.setItem("MicrobesSave_"+this.id, JSON.stringify(obj,function(key, val) {
-      // if (val != null && typeof val == "object") {
-      // if (seen.indexOf(val) >= 0) {
-      // return;
-      // }
-      // seen.push(val);
-      // }
-      // return val;
-      // }));
     } else {
       console.log("Your browser doesn't support save/load")
     }
@@ -534,23 +525,11 @@ export default class Ui {
     let atps = this.tps // actual tps
     let ticks = 0
     let savetimer = start
-    // var speedstep=1;
-    // var speedvelocity=1;
-    // var fpsstats=[]
-    // var fpsfuzzy=10
-    // var missed=0;
-    // var safespeed=tps;
-    // var emergencystops=0;
-    // var loopcounter=0;
     let work = 0
-    // for(i=0;i<fpsfuzzy;i++){
-    // fpsstats.push(60);
-    // }
     const ui = this
     loop()
     graphicsloop()
     function loop () {
-      // loopcounter+=1;
       const d = new Date().getTime()
       let target = (d - od) * (atps / 1000)
       work += target % 1
@@ -582,17 +561,7 @@ export default class Ui {
       }
       if (osec + 1000 <= d) {
         atps = ui.tps
-        // missed=atps-ticks;
-        // while(ticks<atps){
-        // action();
-        // }
         osec = d
-        // fpsstats.push(fps);
-        // fpsstats.shift();
-        // ofps=Math.round(fpsstats.reduce((a,b){return a+b})/fpsfuzzy);
-        // if(ofps>=minfps-5){
-        // safespeed=atps;
-        // }
         ui.drawstats(fps, ticks)
         fps = 0
         ticks = 0
@@ -600,69 +569,13 @@ export default class Ui {
         ui.updateCanvas()
         ui.hidewelcometext()
         ui.showDeathMenu()
-        // if(maxspeed){
-        // if(speedvelocity==2||speedvelocity==-2){
-        // speedstep*=2;
-        // }else {
-        // speedstep=Math.ceil(speedstep/2);
-        // }
-        // if(ofps>=minfps){
-        // if(speedvelocity<-1){
-        // speedstep=Math.ceil(speedstep/2);
-        // atps+=speedstep;
-        // speedvelocity=-1
-        // }
-        // atps+=speedstep;
-
-        // speedvelocity++;
-        // }else if(ofps<minfps){
-        // if(speedvelocity>1){
-        // speedstep=Math.ceil(speedstep/2);
-        // speedstep=Math.ceil(speedstep/2);
-        // speedvelocity=1
-        // }
-        // atps-=speedstep;
-
-        // speedvelocity--;
-        // if(atps<100){
-        // atps=safespeed;
-        // speedstep=1024;
-        // speedvelocity=0;
-        // safespeed/=2;
-        // emergencystops++;
-        // }
-        // }else{
-        // speedvelocity=0;
-        // }
-        // if(speedvelocity<-2){speedvelocity=-2;}
-        // if(speedvelocity> 2){speedvelocity= 2;}
-        // maxspeedstat="";
-        // maxspeedstat+=this.statline("tps",atps);
-        // maxspeedstat+=this.statline("speedstep",speedstep);
-        // maxspeedstat+=this.statline("safespeed",safespeed);
-        // maxspeedstat+=this.statline("Target FPS",minfps);
-        // maxspeedstat+=this.statline("emergency stops",emergencystops);
-        // }else{
-        // maxspeedstat=""
-        // atps=tps;
-        // }
-        // updateCanvas();
       }
-      // if(loopcounter % frameskip==0){
-      // if(osec+30<=d){
-      // draw();
-      // fps+=1;
-      // }
       if (!ui.stop) {
         setTimeout(loop, 10)
       }
-      // requestAnimationFrame(loop);
     }
     function graphicsloop () {
       const d = new Date().getTime()
-      if (osec + 1000 <= d) {
-        // ui.updateCanvas();
-      }
       ui.draw()
       fps += 1
       if (!ui.stop) {

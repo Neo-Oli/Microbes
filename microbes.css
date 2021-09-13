@@ -1,67 +1,76 @@
-body.microbes-demosite{
-    margin:0;
-    height:100vh;
-    overflow:hidden;
-    font-family:sans-serif;
-    background-color:#070215;
+body.microbes-demosite {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: sans-serif;
+    background-color: #070215;
 }
 
-#microbes1{
-    width:100%;
-    height:100%;
-    color:white;
+#microbes1 {
+    width: 100%;
+    height: 100%;
+    color: white;
 }
-.microbes-container canvas{
-    width:100%;
-    height:100%;
-    top:0px;
-    left:0px;
+
+.microbes-container canvas {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
 }
-.microbes-container{
+
+.microbes-container {
     position: relative;
     overflow: hidden;
-    --size:250px;
-     user-select: none;
+
+    --size: 250px;
+
+    user-select: none;
     -moz-user-select: none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     -o-user-select: none;
 }
-.microbes-menu{
+
+.microbes-menu {
     width: var(--size);
     margin-right: calc(0px - var(--size));
     height: 100%;
+    background-color: #2229;
 
-    background-color: #22222299;
     /*! pointer-events: none; */
 
-    color:white;
+    color: white;
     transition: margin 0.5s;
-    padding:5px;
-    box-sizing:border-box;
+    padding: 5px;
+    box-sizing: border-box;
     overflow-y: scroll;
-    overflow-x:hidden;
+    overflow-x: hidden;
     float: right;
     position: absolute;
     top: 0;
     right: 0;
 }
-.microbes-achievements:after{
+
+.microbes-achievements::after {
     content: "";
     display: table;
     clear: both;
 }
-.microbes-container .microbes-stats{
+
+.microbes-container .microbes-stats {
     word-break: break-all;
 }
 
-.microbes-menushown .microbes-menu{
-    margin-right:0;
+.microbes-menushown .microbes-menu {
+    margin-right: 0;
 }
-.microbes-menushown .microbes-menutrigger{
+
+.microbes-menushown .microbes-menutrigger {
     right: var(--size);
 }
-.microbes-menutrigger{
+
+.microbes-menutrigger {
     transition: right 0.5s;
     position: absolute;
     z-index: 1;
@@ -70,8 +79,8 @@ body.microbes-demosite{
     opacity: 0.5;
     margin-right: 15px;
     cursor: pointer;
-    right:0;
-    float: right
+    right: 0;
+    float: right;
     user-select: none;
     -moz-user-select: none;
     -khtml-user-select: none;
@@ -80,193 +89,210 @@ body.microbes-demosite{
     top: 0;
 }
 
-.microbes-menu label+label{
+.microbes-menu label + label {
     float: right;
-    margin-right: 20px
+    margin-right: 20px;
 }
+
 .microbes-menu label{
 
 }
-.microbes-menu .slider{
+
+.microbes-menu .slider {
     width: calc(100% - 55px);
     background: transparent;
-    border:none;
-    margin-bottom:15px;
+    border: none;
+    margin-bottom: 15px;
     margin-top: 5px;
 }
-.microbes-menu .microbes-slider.microbes-reversed{
-    direction: rtl;
 
+.microbes-menu .microbes-slider.microbes-reversed {
+    direction: rtl;
 }
 
-.microbes-container .reset{
+.microbes-container .reset {
     display: inline-block;
     position: relative;
     bottom: 15px;
     cursor: pointer;
     font-size: 36px;
 }
-#microbes-achievement{
+
+#microbes-achievement {
     opacity: 0;
     position: absolute;
     bottom: 50px;
-    left: 0px;
+    left: 0;
     max-width: 300px;
     margin: 0 auto;
-    background-color: #333333;
+    background-color: #333;
     color: white;
     padding: 10px 20px;
     border-radius: 30px;
     left: 0;
     right: 0;
     transition: opacity 1s;
-    pointer-events:none;
+    pointer-events: none;
 }
-#microbes-achievement .microbes-achievement-icon{
+
+#microbes-achievement .microbes-achievement-icon {
     position: absolute;
 }
-#microbes-achievement>*:not(:first-child){
+
+#microbes-achievement > *:not(:first-child) {
     margin-left: 60px;
 }
 
-#microbes-achievement.microbes-visible{
+#microbes-achievement.microbes-visible {
     opacity: 0.8;
 }
-#microbes-achievement .microbes-achievement-title{
-    opacity: 0.5
+
+#microbes-achievement .microbes-achievement-title {
+    opacity: 0.5;
 }
 
-#microbes-achievement .microbes-achievement-name{
-    font-size: 1.5em
+#microbes-achievement .microbes-achievement-name {
+    font-size: 1.5em;
 }
-#microbes-achievement .microbes-achievement-blurb{
-    opacity:0.5;
+
+#microbes-achievement .microbes-achievement-blurb {
+    opacity: 0.5;
     font-size: 0.8em;
 }
 
-.microbes-menuAchievement{
-    --size:50px;
+.microbes-menuAchievement {
+    --size: 50px;
+
     width: var(--size);
     height: var(--size);
-    background-color: #777777;
+    background-color: #777;
     display: block;
     margin-right: 10px;
     border-radius: 3px;
-    margin-top:10px;
-    cursor:help;
+    margin-top: 10px;
+    cursor: help;
     font-size: 10px;
     float: left;
     text-align: center;
     padding-top: 15px;
     box-sizing: border-box;
 }
-.microbes-Achievement-icon{
+
+.microbes-Achievement-icon {
     text-align: center;
     display: inline-block;
     line-height: 1.2em;
 }
 
-.microbes-menuAchievementsTitle{
+.microbes-menuAchievementsTitle {
     clear: both;
-    text-align:center;
+    text-align: center;
     padding-top: 15px;
 }
+
 .microbes-menuAchievement:hover .microbes-menuAchievementName,
 .microbes-menuAchievement:focus .microbes-menuAchievementName {
     opacity: 1;
 }
-.microbes-menuAchievement.microbes-done{
+
+.microbes-menuAchievement.microbes-done {
     background-color: #46a846;
 }
-.microbes-menuAchievement .microbes-menuAchievementName{
+
+.microbes-menuAchievement .microbes-menuAchievementName {
     opacity: 0;
     pointer-events: none;
-    background-color:#888888;
-    position:absolute;
-    padding:10px;
-    min-width:200px;
+    background-color: #888;
+    position: absolute;
+    padding: 10px;
+    min-width: 200px;
     left: 0;
     font-size: 16px;
-    line-height:1.3em;
+    line-height: 1.3em;
     z-index: 1;
 }
-.microbe-microbe-icon{
-    transform:rotate(45deg);
-    display:inline-block;
-    font-weight:500;
+
+.microbe-microbe-icon {
+    transform: rotate(45deg);
+    display: inline-block;
+    font-weight: 500;
     font-size: 23px;
 }
-.microbes-button.microbes-playgame{
-    background-color: #4b4bab; 
+
+.microbes-button.microbes-playgame {
+    background-color: #4b4bab;
 }
-.microbes-button.microbes-pausegame{
-    background-color: #4b4bab; 
+
+.microbes-button.microbes-pausegame {
+    background-color: #4b4bab;
 }
-.microbes-button{
-    cursor:pointer;
-    border-radius:3px;
-    background-color:#9C3232;
+
+.microbes-button {
+    cursor: pointer;
+    border-radius: 3px;
+    background-color: #9c3232;
     padding: 5px;
     float: left;
     clear: both;
     margin-bottom: 15px;
 }
-.microbes-button-hidden{
-    display:none;
+
+.microbes-button-hidden {
+    display: none;
 }
 
-.microbes-stats{
-}
-
-
-.microbes-menu-title{
+.microbes-menu-title {
     font-size: 2.5em;
     margin-bottom: 15px;
 }
-.mircobes-sub-title{
+
+.mircobes-sub-title {
     font-size: 1.4em;
     margin-top: 15px;
 }
-.microbes-menu-container{
+
+.microbes-menu-container {
     margin-bottom: 50px;
 }
-#microbes-welcometext, .microbes-nojs{
 
+#microbes-welcometext,
+.microbes-nojs {
     position: absolute;
-    top:0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     z-index: 1;
-    color: #ffffff;
+    color: #fff;
     opacity: 0.5;
-    text-shadow: 0px 0px 6px #fff;
+    text-shadow: 0 0 6px #fff;
     font-size: 56px;
     text-align: center;
     width: 100%;
     top: 27%;
     transition: opacity 5s;
-    pointer-events:none;
+    pointer-events: none;
 }
 
-#microbes-welcometext.microbes-hidden{
-    opacity:0;
+#microbes-welcometext.microbes-hidden {
+    opacity: 0;
 }
-.microbes-popup{
+
+.microbes-popup {
     position: absolute;
     top: 25%;
-    left: 0px;
+    left: 0;
     max-width: 300px;
     margin: 0 auto;
-    background-color: #333333;
+    background-color: #333;
     color: white;
     padding: 10px 20px;
     border-radius: 30px;
     left: 0;
     right: 0;
     opacity: 0;
-    pointer-events:none;
-}
-.microbes-popup.microbes-popupshown{
-    opacity:1;
-    pointer-events:all;
+    pointer-events: none;
 }
 
+.microbes-popup.microbes-popupshown {
+    opacity: 1;
+    pointer-events: all;
+}

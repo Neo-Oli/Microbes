@@ -23,5 +23,6 @@
     "eslint-plugin-standard": "latest",
     "webpack": "latest",
     "webpack-cli": "latest"
-  }
+  },
+  "packageManager": "yarn@3.2.0"
 }
